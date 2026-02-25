@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Inicio{% endblock %}
+{% block content %}
+<div class="card shadow">
+    <div class="card-body">
+        <h2>Bienvenido {{ nombre }}</h2>
+        <p>Rol actual: <strong>{{ rol }}</strong></p>
+    </div>
+</div>
+{% endblock %}
