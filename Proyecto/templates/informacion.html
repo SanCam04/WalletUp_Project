@@ -1,8 +1,21 @@
 {% extends 'base.html' %}
 {% block title %}Información{% endblock %}
 {% block content %}
-<div class="alert alert-info">
-    <h3>{{ curso }}</h3>
-    <p>Este módulo enseña arquitectura MVC con Flask y Bootstrap.</p>
-</div>
+<main class="container2">
+    <section class="card">
+        <h2>Servicio 1</h2>
+        <p>Descripción del primer servicio ofrecido por la empresa.</p>
+        <button>Ver más</button>
+    </section>
+    <section class="card">
+        <h2>Servicio 2</h2>
+        <p>Información relevante sobre el segundo servicio disponible.</p>
+        <button>Ver más</button>
+    </section>
+    <section class="card">
+        <h2>Servicio 3</h2>
+        <p>Detalles importantes del tercer servicio que se ofrece.</p>
+        <button>Ver más</button>
+    </section>
+</main>
 {% endblock %}

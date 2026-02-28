@@ -10,6 +10,21 @@ def index():
  nombre="Felipe",
  rol="Administrador"
  )
+@app.route('/register')
+def register():
+ return render_template(
+ 'register.html',
+ )
+@app.route('/calculadora')
+def calculadora():
+ return render_template(
+ 'calculadora.html',
+ )
+@app.route('/imc')
+def imc():
+ return render_template(
+ 'imc.html',
+ )
 @app.route('/informacion')
 def informacion():
  return render_template(

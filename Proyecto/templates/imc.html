@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Calculadora IMC{% endblock %}
+{% block content %}
+<div class="card2 shadow p-4">
+    <h4 class="mb-3">Calculadora IMC</h4>
+    <form id="formIMC">
+        <div class="mb-3">
+            <label class="form-label">Peso (kg)</label>
+            <input type="number" id="peso" class="form-control" step="0.1" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Altura (m)</label>
+            <input type="number" id="altura" class="form-control" step="0.01" required>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" id="btnCalcularIMC" class="btn btn-primary flex-fill">Calcular IMC</button>
+        </div>
+    </form>
+    <div id="mensajeIMC" class="mt-3"></div>
+</div>
+{% endblock %}
