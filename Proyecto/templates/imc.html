@@ -3,19 +3,26 @@
 {% block content %}
 <div class="card2 shadow p-4">
     <h4 class="mb-3">Calculadora IMC</h4>
-    <form id="formIMC">
+    <form action="/CalImc" method="post">
         <div class="mb-3">
             <label class="form-label">Peso (kg)</label>
-            <input type="number" id="peso" class="form-control" step="0.1" required>
+            <input type="number" name="peso" class="form-control" step="0.1" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Altura (m)</label>
-            <input type="number" id="altura" class="form-control" step="0.01" required>
+            <input type="number" name="altura" class="form-control" step="0.01" required>
         </div>
-        <div class="d-flex gap-2">
-            <button type="button" id="btnCalcularIMC" class="btn btn-primary flex-fill">Calcular IMC</button>
-        </div>
+        <button type="submit" class="btn btn-primary">Calcular IMC</button>
     </form>
-    <div id="mensajeIMC" class="mt-3"></div>
+
+    {% if imc %}
+    <div id="mensajeIMC" class="mt-4">
+        <div class="alert alert-info">
+            <h5>Resultados:</h5>
+            <p>IMC: <strong>{{ imc }}</strong></p>
+            <p>Categoría: <strong>{{ categoria }}</strong></p>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

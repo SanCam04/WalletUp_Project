@@ -24,11 +24,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (btnDiv) btnDiv.addEventListener("click", function () { calcular("/"); });
     if (btnSum) btnSum.addEventListener("click", function () { calcular("+"); });
     if (btnRes) btnRes.addEventListener("click", function () { calcular("-"); });
-
-    var btnCalcularIMC = document.getElementById("btnCalcularIMC");
-    if (btnCalcularIMC) {
-        btnCalcularIMC.addEventListener("click", function () { calcularIMC(); });
-    }
 });
 
 function calcular(op) {
@@ -50,38 +45,3 @@ function calcular(op) {
     mensajeCalc.innerHTML = '<div class="alert alert-info">Resultado: ' + r + "</div>";
 }
 
-function calcularIMC() {
-    var peso = parseFloat(document.getElementById("peso").value);
-    var altura = parseFloat(document.getElementById("altura").value);
-    var mensajeIMC = document.getElementById("mensajeIMC");
-
-    if (Number.isNaN(peso) || Number.isNaN(altura)) {
-        mensajeIMC.innerHTML = '<div class="alert alert-danger">Completa peso y altura</div>';
-        return;
-    }
-
-    if (peso <= 0 || altura <= 0) {
-        mensajeIMC.innerHTML = '<div class="alert alert-danger">Peso y altura deben ser mayores a 0</div>';
-        return;
-    }
-
-    var imc = peso / (altura * altura);
-    var categoria = "";
-    var color = "info";
-
-    if (imc < 18.5) {
-        categoria = "Bajo peso";
-        color = "warning";
-    } else if (imc < 25) {
-        categoria = "Peso normal";
-        color = "success";
-    } else if (imc < 30) {
-        categoria = "Sobrepeso";
-        color = "warning";
-    } else {
-        categoria = "Obesidad";
-        color = "danger";
-    }
-
-    mensajeIMC.innerHTML = '<div class="alert alert-' + color + '">IMC: ' + imc.toFixed(2) + ' (' + categoria + ')</div>';
-}

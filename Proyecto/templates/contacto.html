@@ -3,8 +3,12 @@
 {% block content %}
 <div class="card">
     <div class="card-body">
-        <h3>Contacto</h3>
-        <p>Correo de soporte: <strong>{{ email }}</strong></p>
+        <h3>Formulario de Contacto</h3>
+        <form action="/usuario" method="post">
+            <input type="text" name="nombre">
+            <input type="submit" value="Enviar">
+        </form>
+        <p>{{ nombreU }}</p>
     </div>
 </div>
 {% endblock %}
