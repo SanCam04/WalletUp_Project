@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}Simulador CDAT - Banco Falabella{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Columna izquierda: Imagen WhatsApp -->
+        <div class="col-lg-6 mb-4 whatsapp-container">
+            <img src="{{ url_for('static', filename='images/WhatsApp Image 2026-03-10 at 8.27.18 PM.jpeg') }}" class="whatsapp-image" alt="WhatsApp Falabella">
+        </div>
+
+        <!-- Columna derecha: Formulario y Resultados -->
+        <div class="col-lg-6">
+            <!-- SECCION SIMULADOR -->
+            <div id="seccionSimulador">
+                <!-- Título principal -->
+                <h1 class="simulador-title mb-4">Simula tu <span class="title-green">CDAT</span></h1>
+
+                <!-- Banner info -->
+                <div class="info-banner mb-4">
+                    <span class="info-icon">ⓘ</span>
+                    <span>Exclusivo para clientes de Banco Falabella</span>
+                </div>
+
+                <form method="POST" action="{{ url_for('simular') }}">
+                    <!-- Ingresa tu Identificación -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Ingresa tu Identificación</label>
+
+                        <select class="form-select form-control-lg mb-3" id="tipoDocumento" name="tipoDocumento" required>
+                            <option value="">Ingresa tu identificación</option>
+                            <option value="cc">Cédula de Ciudadanía</option>
+                            <option value="ce">Cédula de Extranjería</option>
+                            <option value="nit">NIT</option>
+                            <option value="pasaporte">Pasaporte</option>
+                        </select>
+
+                        <input type="text" class="form-control form-control-lg" id="documento" name="documento" placeholder="Ej: 212345697" required>
+                    </div>
+
+                    <!-- ¿Cuánto quieres invertir? -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">¿Cuánto quieres invertir?</label>
+                        <small class="d-block text-muted mb-2">Monto mínimo $ 200.000</small>
+
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="abono" name="abono" placeholder="0" min="200000" required>
+                        </div>
+                    </div>
+
+                    <!-- ¿Cómo quieres recibir tus intereses? -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            ¿Cómo quieres recibir tus intereses?
+                            <span class="help-icon" title="Elige cómo prefieres recibir los intereses">❓</span>
+                        </label>
+
+                        <div class="toggle-buttons mb-3">
+                            <button type="button" class="toggle-btn active" data-value="vencimiento">
+                                AL VENCIMIENTO
+                            </button>
+                            <button type="button" class="toggle-btn" data-value="periodico">
+                                ABONO PERIÓDICO
+                            </button>
+                        </div>
+
+                        <input type="hidden" id="vencimiento" name="vencimiento" value="vencimiento">
+                    </div>
+
+                    <!-- Banner requisito -->
+                    <div class="alert-banner mb-4">
+                        <span class="alert-icon">⚠</span>
+                        <span>Es requisito tener una Cuenta de Ahorros, PAC o Cuenta Corriente vigente y activa con Banco Falabella.</span>
+                    </div>
+
+                    <!-- ¿En qué plazo de días? -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">¿En qué plazo de días?</label>
+                        <small class="d-block text-muted mb-2">Mínimo 30 días - Máximo 1080 días</small>
+
+                        <div class="input-group input-group-lg">
+                            <input type="date" class="form-control" id="plazo" name="plazo" required>
+                            <span class="input-group-text">📅</span>
+                        </div>
+                    </div>
+
+                    <!-- Ver Tasas -->
+                    <div class="text-center mb-4">
+                        <a href="#" class="ver-tasas">Ver Tasas ↗</a>
+                    </div>
+
+                    <!-- Botón Simular -->
+                    <button type="submit" class="btn btn-simular w-100 fw-bold btn-lg">Simular</button>
+                </form>
+            </div>
+
+            <!-- SECCION RESULTADOS -->
+            <div id="seccionResultados" style="display: none;">
+                <!-- Título resultados -->
+                <h2 class="resultado-titulo mb-4">¡Así puede estar creciendo tu dinero!</h2>
+
+                <!-- Subtítulo -->
+                <p class="texto-resultado-subtitulo">Valor total a recibir</p>
+
+                <!-- Monto grande -->
+                <div class="monto-grande mb-2" id="montoTotalGrande">$ 8.480.868</div>
+
+                <!-- Plazo -->
+                <p class="texto-plazo mb-4">en un plazo de <strong id="plazoResultado">235</strong> días</p>
+
+                <!-- Divisor -->
+                <hr class="divisor-resultado mb-4">
+
+                <!-- Tabla de resultados -->
+                <div class="tabla-resultados mb-4">
+                    <div class="fila-resultado">
+                        <span class="label-resultado">Rendimientos totales de la inversión</span>
+                        <span class="valor-resultado" id="rendimientosTotal">$ 480.868</span>
+                    </div>
+                    <div class="fila-resultado">
+                        <span class="label-resultado">Retención en la fuente</span>
+                        <span class="valor-resultado" id="retencion">$ 20.036</span>
+                    </div>
+                    <div class="fila-resultado">
+                        <span class="label-resultado">Valor de la inversión</span>
+                        <span class="valor-resultado" id="valorInversion">$ 8.000.000</span>
+                    </div>
+                    <div class="fila-resultado">
+                        <span class="label-resultado">Pago de rendimientos</span>
+                        <span class="valor-resultado" id="pagoRendimientos">Al vencimiento</span>
+                    </div>
+                    <div class="fila-resultado">
+                        <span class="label-resultado">Tasa efectiva anual</span>
+                        <span class="valor-resultado" id="tasaAnual">9.75%</span>
+                    </div>
+                    <div class="fila-resultado">
+                        <span class="label-resultado">Fecha inicial de la inversión</span>
+                        <span class="valor-resultado" id="fechaInicial">10/03/2026</span>
+                    </div>
+                    <div class="fila-resultado">
+                        <span class="label-resultado">Fecha de vencimiento</span>
+                        <span class="valor-resultado" id="fechaVencimiento">31/10/2026</span>
+                    </div>
+                </div>
+
+                <!-- Aviso legal -->
+                <p class="aviso-legal mb-4">Simulación válida solo por el día de hoy</p>
+
+                <!-- Banner informativo -->
+                <div class="banner-info-resultado mb-4">
+                    <span class="info-icon">ⓘ</span>
+                    <span>Si eres Cliente activo de Banco Falabella con una Cuenta de Ahorros Costo $0, PAC o Cuenta Corriente abre tu CDAT 100% Digital desde tu Banca en línea o App.
+
+                    ¿Aún no eres Cliente de Banco Falabella? No te preocupes, puedes abrir tu Cuenta de Ahorros Costo $0 en minutos haciendo Click en el botón Crear Cuenta.</span>
+                </div>
+
+                <!-- Botones -->
+                <div class="d-grid gap-2 d-sm-flex justify-content-center">
+                    <button type="button" class="btn btn-volver flex-sm-fill" id="btnVolverSimular">Volver a simular</button>
+                    <button type="button" class="btn btn-crear-cuenta flex-sm-fill">Crear cuenta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

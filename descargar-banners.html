@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargar Banners - Falabella</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #91c93f 0%, #6ba630 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+        }
+        .banner-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+        .banner-card:hover {
+            transform: translateY(-5px);
+        }
+        .banner-preview {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+        .banner-info {
+            padding: 20px;
+        }
+        .banner-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .banner-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .btn-download {
+            background-color: #91c93f;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-download:hover {
+            background-color: #6ba630;
+            color: white;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .instructions {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .instructions h3 {
+            color: #91c93f;
+            margin-bottom: 15px;
+        }
+        .instructions ol {
+            margin-bottom: 0;
+        }
+        .instructions li {
+            margin-bottom: 8px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📦 Descargar Banners</h1>
+            <p>Banners publicitarios de Falabella - Proyecto ProyectoFalabella</p>
+        </div>
+
+        <!-- Instrucciones -->
+        <div class="instructions">
+            <h3>📋 Instrucciones</h3>
+            <ol>
+                <li>Descarga cada banner haciendo clic en el botón "Descargar"</li>
+                <li>Guarda el archivo en: <code>ProyectoFalabella/static/banners/</code></li>
+                <li>Los nombres de archivo deben ser exactos (como aparecen aquí)</li>
+                <li>Recarga la página web para ver los banners en el carrusel</li>
+            </ol>
+        </div>
+
+        <!-- Banner 1 -->
+        <div class="banner-card">
+            <img src="file:///Users/danielcamacho/development/ejemplo/ProyectoFalabella/static/banners/banner-1-tecnologia.png" alt="Banner 1" class="banner-preview" id="preview1">
+            <div class="banner-info">
+                <div class="banner-title">🖥️ Banner 1 - TV y Tecnología</div>
+                <div class="banner-description">Hasta 40% OFF en Televisores y Electrónicos</div>
+                <div class="banner-description"><strong>Nombre archivo:</strong> <code>banner-1-tecnologia.png</code></div>
+                <a href="file:///Users/danielcamacho/development/ejemplo/ProyectoFalabella/static/banners/banner-1-tecnologia.png" download="banner-1-tecnologia.png" class="btn-download">⬇️ Descargar Banner 1</a>
+            </div>
+        </div>
+
+        <!-- Banner 2 -->
+        <div class="banner-card">
+            <img src="file:///Users/danielcamacho/development/ejemplo/ProyectoFalabella/static/banners/banner-2-moda.png" alt="Banner 2" class="banner-preview" id="preview2">
+            <div class="banner-info">
+                <div class="banner-title">👗 Banner 2 - Moda & Estilo</div>
+                <div class="banner-description">30% Descuento en Temporada Otoño 2025</div>
+                <div class="banner-description"><strong>Nombre archivo:</strong> <code>banner-2-moda.png</code></div>
+                <a href="file:///Users/danielcamacho/development/ejemplo/ProyectoFalabella/static/banners/banner-2-moda.png" download="banner-2-moda.png" class="btn-download">⬇️ Descargar Banner 2</a>
+            </div>
+        </div>
+
+        <!-- Banner 3 -->
+        <div class="banner-card">
+            <img src="file:///Users/danielcamacho/development/ejemplo/ProyectoFalabella/static/banners/banner-3-electrodomesticos.png" alt="Banner 3" class="banner-preview" id="preview3">
+            <div class="banner-info">
+                <div class="banner-title">🍳 Banner 3 - Línea Blanca Electrodomésticos</div>
+                <div class="banner-description">Hasta 50% OFF en Cocinas y Electrodomésticos</div>
+                <div class="banner-description"><strong>Nombre archivo:</strong> <code>banner-3-electrodomesticos.png</code></div>
+                <a href="file:///Users/danielcamacho/desarrollo/ejemplo/ProyectoFalabella/static/banners/banner-3-electrodomesticos.png" download="banner-3-electrodomesticos.png" class="btn-download">⬇️ Descargar Banner 3</a>
+            </div>
+        </div>
+
+        <!-- Banner 4 -->
+        <div class="banner-card">
+            <img src="file:///Users/danielcamacho/development/ejemplo/ProyectoFalabella/static/banners/banner-4-deportes.png" alt="Banner 4" class="banner-preview" id="preview4">
+            <div class="banner-info">
+                <div class="banner-title">⚽ Banner 4 - Deportes</div>
+                <div class="banner-description">2x1 en Artículos Deportivos - Actívate y Muévete</div>
+                <div class="banner-description"><strong>Nombre archivo:</strong> <code>banner-4-deportes.png</code></div>
+                <a href="file:///Users/danielcamacho/development/ejemplo/ProyectoFalabella/static/banners/banner-4-deportes.png" download="banner-4-deportes.png" class="btn-download">⬇️ Descargar Banner 4</a>
+            </div>
+        </div>
+
+        <!-- Banner 5 -->
+        <div class="banner-card">
+            <img src="file:///Users/danielcamacho/development/ejemplo/ProyectoFalabella/static/banners/banner-5-hogar.png" alt="Banner 5" class="banner-preview" id="preview5">
+            <div class="banner-info">
+                <div class="banner-title">🏠 Banner 5 - Hogar</div>
+                <div class="banner-description">Transforma tu hogar - Muebles, Decoración y más</div>
+                <div class="banner-description"><strong>Nombre archivo:</strong> <code>banner-5-hogar.png</code></div>
+                <a href="file:///Users/danielcamacho/development/ejemplo/ProyectoFalabella/static/banners/banner-5-hogar.png" download="banner-5-hogar.png" class="btn-download">⬇️ Descargar Banner 5</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; color: white; margin-top: 50px; padding-bottom: 30px;">
+            <p>Una vez descargues todos los banners, colócalos en la carpeta <code style="color: #91c93f;">ProyectoFalabella/static/banners/</code></p>
+        </div>
+    </div>
+
+    <script>
+        // Cargar las imágenes desde URLs (necesitas reemplazar con las URLs reales de descarga)
+        function cargarPreviews() {
+            // Los previews se mostrarán cuando descargues los banners
+            console.log("Página lista para descargar banners");
+        }
+
+        function descargarBanner(numero, nombre) {
+            alert(`⬇️ Descargando Banner ${numero}...\n\nNombre: ${nombre}\n\nGuarda el archivo en:\nProyectoFalabella/static/banners/\n\n¡Asegúrate de que el nombre del archivo sea exacto!`);
+            // Aquí iría la lógica de descarga
+            // Por ahora solo muestra instrucciones
+        }
+
+        window.onload = cargarPreviews;
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

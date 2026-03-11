@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Resultados CDAT - Banco Falabella{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Columna izquierda: Imagen WhatsApp -->
+        <div class="col-lg-6 mb-4 whatsapp-container">
+            <img src="{{ url_for('static', filename='images/WhatsApp Image 2026-03-10 at 8.27.18 PM.jpeg') }}" class="whatsapp-image" alt="WhatsApp Falabella">
+        </div>
+
+        <!-- Columna derecha: Resultados -->
+        <div class="col-lg-6">
+            <!-- Título resultados -->
+            <h2 class="resultado-titulo mb-4">¡Así puede estar creciendo tu dinero!</h2>
+
+            <!-- Subtítulo -->
+            <p class="texto-resultado-subtitulo">Valor total a recibir</p>
+
+            <!-- Monto grande -->
+            <div class="monto-grande mb-2">{{ resultados.montoTotalGrande }}</div>
+
+            <!-- Plazo -->
+            <p class="texto-plazo mb-4">en un plazo de <strong>{{ resultados.plazoResultado }}</strong> días</p>
+
+            <!-- Divisor -->
+            <hr class="divisor-resultado mb-4">
+
+            <!-- Tabla de resultados -->
+            <div class="tabla-resultados mb-4">
+                <div class="fila-resultado">
+                    <span class="label-resultado">Rendimientos totales de la inversión</span>
+                    <span class="valor-resultado">{{ resultados.rendimientosTotal }}</span>
+                </div>
+                <div class="fila-resultado">
+                    <span class="label-resultado">Retención en la fuente</span>
+                    <span class="valor-resultado">{{ resultados.retencion }}</span>
+                </div>
+                <div class="fila-resultado">
+                    <span class="label-resultado">Valor de la inversión</span>
+                    <span class="valor-resultado">{{ resultados.valorInversion }}</span>
+                </div>
+                <div class="fila-resultado">
+                    <span class="label-resultado">Pago de rendimientos</span>
+                    <span class="valor-resultado">{{ resultados.pagoRendimientos }}</span>
+                </div>
+                <div class="fila-resultado">
+                    <span class="label-resultado">Tasa efectiva anual</span>
+                    <span class="valor-resultado">{{ resultados.tasaAnual }}</span>
+                </div>
+                <div class="fila-resultado">
+                    <span class="label-resultado">Fecha inicial de la inversión</span>
+                    <span class="valor-resultado">{{ resultados.fechaInicial }}</span>
+                </div>
+                <div class="fila-resultado">
+                    <span class="label-resultado">Fecha de vencimiento</span>
+                    <span class="valor-resultado">{{ resultados.fechaVencimiento }}</span>
+                </div>
+            </div>
+
+            <!-- Aviso legal -->
+            <p class="aviso-legal mb-4">Simulación válida solo por el día de hoy</p>
+
+            <!-- Banner informativo -->
+            <div class="banner-info-resultado mb-4">
+                <span class="info-icon">ⓘ</span>
+                <span>Si eres Cliente activo de Banco Falabella con una Cuenta de Ahorros Costo $0, PAC o Cuenta Corriente abre tu CDAT 100% Digital desde tu Banca en línea o App.
+
+                ¿Aún no eres Cliente de Banco Falabella? No te preocupes, puedes abrir tu Cuenta de Ahorros Costo $0 en minutos haciendo Click en el botón Crear Cuenta.</span>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-grid gap-2 d-sm-flex justify-content-center">
+                <a href="{{ url_for('index') }}" class="btn btn-volver flex-sm-fill">Volver a simular</a>
+                <button type="button" class="btn btn-crear-cuenta flex-sm-fill">Crear cuenta</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

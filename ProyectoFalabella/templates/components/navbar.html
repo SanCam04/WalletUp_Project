@@ -1,0 +1,107 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid d-flex align-items-center gap-4">
+        <!-- Logo Falabella -->
+        <a class="navbar-brand" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/Falabella.svg.png') }}" alt="Falabella Logo"
+                class="logo-navbar">
+        </a>
+
+        <!-- Menu Hamburguesa + Texto -->
+        <a class="nav-link fw-bold" href="{{ url_for('index') }}">
+            ☰ Menu
+        </a>
+
+        <!-- Search (muy largo) -->
+        <form class="d-flex flex-grow-1 search-form">
+            <input class="form-control form-control-lg" type="search" placeholder="Buscar productos..." aria-label="Search">
+            <button class="btn btn-success ms-2" type="submit">Buscar</button>
+        </form>
+
+        <!-- Menús de la derecha (alineados a la derecha) -->
+        <div class="d-flex align-items-center gap-4 ms-auto">
+            {% if session.get('usuario') %}
+                <span class="nav-link">Bienvenido, {{ session.get('nombre') }}</span>
+                <a class="nav-link" href="{{ url_for('index') }}">Mi Cuenta</a>
+                <a class="nav-link" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+            {% else %}
+                <button class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#registroModal" style="border: none; background: none; text-decoration: none; padding: 0; color: #333; cursor: pointer; font-weight: 500;">Registro</button>
+                <button class="nav-link btn btn-link" data-bs-toggle="modal" data-bs-target="#loginModal" style="border: none; background: none; text-decoration: none; padding: 0; color: #333; cursor: pointer; font-weight: 500;">Inicia Sesión</button>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<!-- MODAL DE REGISTRO -->
+<div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registroModalLabel">Crear Cuenta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('register') }}" id="registroForm">
+                    <div class="mb-3">
+                        <label for="registerName" class="form-label">👤 Nombre Completo</label>
+                        <input type="text" class="form-control" id="registerName" name="fullname" placeholder="Tu nombre completo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerEmail" class="form-label">📧 Correo Electrónico</label>
+                        <input type="email" class="form-control" id="registerEmail" name="email" placeholder="tu@correo.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerPhone" class="form-label">📱 Teléfono</label>
+                        <input type="tel" class="form-control" id="registerPhone" name="phone" placeholder="+57 3xx xxxxxxx" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerPassword" class="form-label">🔒 Contraseña</label>
+                        <input type="password" class="form-control" id="registerPassword" name="password" placeholder="Crea una contraseña" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerConfirmPassword" class="form-label">✓ Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="registerConfirmPassword" name="confirm_password" placeholder="Confirma tu contraseña" required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="termsCheckbox" name="terms" required>
+                        <label class="form-check-label" for="termsCheckbox">
+                            Acepto los <a href="#" class="text-success">términos y condiciones</a>
+                        </label>
+                    </div>
+                    <div id="registroError"></div>
+                    <button type="submit" class="btn btn-success w-100 fw-bold">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE LOGIN -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Inicia Sesión</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('login') }}" id="loginForm">
+                    <div class="mb-3">
+                        <label for="loginEmail" class="form-label">📧 Correo Electrónico</label>
+                        <input type="email" class="form-control" id="loginEmail" name="email" placeholder="tu@correo.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">🔒 Contraseña</label>
+                        <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Tu contraseña" required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe" name="remember">
+                        <label class="form-check-label" for="rememberMe">Recuérdame</label>
+                    </div>
+                    <div id="loginError"></div>
+                    <button type="submit" class="btn btn-success w-100 fw-bold">Iniciar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
