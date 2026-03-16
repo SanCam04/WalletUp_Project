@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}CMR Puntos - Banco Falabella{% endblock %}
+
+{% block css %}
+    <link href="{{ url_for('static', filename='css/submenu-cmr-puntos.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <!-- Contenido del módulo de CMR Puntos -->
+    {% include 'modules/cmr-puntos/cmr-puntos-content.html' %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/cmr-puntos.js') }}"></script>
+{% endblock %}

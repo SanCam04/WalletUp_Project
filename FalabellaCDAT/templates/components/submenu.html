@@ -1,18 +1,18 @@
-<!-- submenu secundario -->
+<!-- Submenu Navigation (solo la barra, no los paneles de contenido) -->
 <nav class="submenu-navbar">
     <div class="container-fluid">
         <ul class="submenu-list">
-            <li><a href="#">Cuentas</a></li>
-            <li><a href="#">Tarjetas CMR</a></li>
-            <li><a href="#">Inversión</a></li>
-            <li><a href="#">Créditos</a></li>
-            <li><a href="#">Beneficios</a></li>
-            <li><a href="#">CMR Puntos</a></li>
-            <li><a href="#">BRE-B</a></li>
-            <li><a href="#">Canales</a></li>
-            <li><a href="#">Educación Financiera</a></li>
-            <li><a href="#">Empresa</a></li>
-            <li><a href="#">Seguros</a></li>
+            <li><a href="#" onclick="abrirSubmenu(event, 'cuentas')">Cuentas</a></li>
+            <li><a href="#" onclick="abrirSubmenu(event, 'tarjetas')">Tarjetas CMR</a></li>
+            <li><a href="{{ url_for('index') }}" {% if request.path == '/' %}class="active"{% endif %}>Inversión</a></li>
+            <li><a href="#" onclick="abrirSubmenu(event, 'creditos')">Créditos</a></li>
+            <li><a href="#" onclick="abrirSubmenu(event, 'beneficios')">Beneficios</a></li>
+            <li><a href="{{ url_for('cmr_puntos') }}" {% if request.path == '/cmr-puntos' %}class="active"{% endif %}>CMR Puntos</a></li>
+            <li><a href="#" onclick="abrirSubmenu(event, 'bre-b')">BRE-B</a></li>
+            <li><a href="#" onclick="abrirSubmenu(event, 'canales')">Canales</a></li>
+            <li><a href="#" onclick="abrirSubmenu(event, 'educacion')">Educación Financiera</a></li>
+            <li><a href="#" onclick="abrirSubmenu(event, 'empresa')">Empresa</a></li>
+            <li><a href="#" onclick="abrirSubmenu(event, 'seguros')">Seguros</a></li>
         </ul>
     </div>
 </nav>

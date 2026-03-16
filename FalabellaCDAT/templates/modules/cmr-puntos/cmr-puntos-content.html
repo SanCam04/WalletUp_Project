@@ -1,0 +1,54 @@
+<!-- CMR Puntos Submenu Section -->
+<link href="{{ url_for('static', filename='css/submenu-cmr-puntos.css') }}" rel="stylesheet">
+
+<div class="cmr-puntos-section">
+    <div class="container-fluid">
+        <!-- Botones/Tabs (siempre visibles) -->
+        <div class="cmr-subsecciones">
+
+            <div class="cmr-card" onclick="mostrarContenido('que-es')">
+                <img src="https://www.cmrpuntos.com.co/static/media/og-logo.9e979d41.png" alt="CMR Puntos"
+                    class="cmr-logo">
+            </div>
+
+            <div class="cmr-card" onclick="mostrarContenido('acumular')">
+                <img src="https://www.bancofalabella.com.co/assets/icons/ic-elite-premium.svg" alt="Acumular"
+                    class="cmr-logo">
+
+            </div>
+
+            <div class="cmr-card" onclick="mostrarContenido('redimir')">
+                <img src="https://images.ctfassets.net/n8a32dlewwba/3cFgNSxaZCRWsdaGRRP8ou/06f1c7b6015a31253b7aa8c735c3d1d1/icogiftcard.svg"
+                    alt="Gift Card" class="cmr-logo">
+            </div>
+        </div>
+
+        <!-- Contenido dinámico (debajo de los botones) -->
+        <div class="cmr-contenido">
+            <!-- ¿Qué es CMR Puntos? -->
+            <div id="que-es" class="cmr-content-panel">
+                <div class="cmr-imagen-solo">
+                    <img src="{{ url_for('static', filename='images/cmrfoto.jpeg') }}" alt="Cómo acumular"
+                        class="cmr-imagen-full">
+                </div>
+            </div>
+
+            <!-- ¿Cómo acumular? -->
+            <div id="acumular" class="cmr-content-panel" style="display: none;">
+                <div class="cmr-imagen-solo">
+                    <img src="{{ url_for('static', filename='images/puntoscmr.jpeg') }}" alt="CMR Puntos"
+                        class="cmr-imagen-full">
+                </div>
+
+            </div>
+
+            <!-- ¿Cómo redimir? -->
+            <div id="redimir" class="cmr-content-panel" style="display: none;">
+                <div class="cmr-imagen-solo">
+                    <img src="{{ url_for('static', filename='images/giftcard.jpeg') }}" alt="Gift Card"
+                        class="cmr-imagen-full">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

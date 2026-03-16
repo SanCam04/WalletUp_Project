@@ -1,7 +1,3 @@
-# ====================================================================
-# IMPORTAR LIBRERIAS NECESARIAS
-# ====================================================================
-
 # importar funciones principales de flask para crear la aplicacion web
 from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify
 
@@ -12,10 +8,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # importar datetime para manejar fechas y hacer calculos de dias
 from datetime import datetime
-
-# importar modulo math (aunque no se usa actualmente, puede servir para calculos futuros)
-import math
-
 
 # ====================================================================
 # INICIALIZAR APLICACION FLASK
@@ -40,6 +32,14 @@ usuarios = {}
 # FUNCIONES AUXILIARES
 # ====================================================================
 
+# ====================================================================
+# EJEMPLO: RESTA DE FECHAS
+# ====================================================================
+# Python convierte cada fecha a numero de dias desde 1970, luego resta:
+# fecha1 = fecha(2026, 12, 25)  # → 20,719 dias desde 1970
+# fecha2 = fecha(2026, 3, 14)   # → 20,433 dias desde 1970
+# diferencia = fecha1 - fecha2  # → 20,719 - 20,433 = 286 dias
+
 # funcion para calcular los dias entre hoy y una fecha futura
 def calcular_dias(fecha_str):
     # convertir el string de fecha (formato yyyy-mm-dd) a objeto date
@@ -56,27 +56,27 @@ def calcular_dias(fecha_str):
 
 
 # funcion para obtener la tasa de interes segun el numero de dias
-# las tasas aumentan a medida que aumenta el plazo de la inversion
+# las tasas se basan en los valores reales de Falabella CDAT
 def obtener_tasa(dias):
-    # 720 dias (2 anos) -> 6.0%
-    if dias >= 720:
-        return 6.0
-    # 360 dias (1 ano) -> 5.5%
-    elif dias >= 360:
-        return 5.5
-    # 180 dias (6 meses) -> 5.0%
+    # 366+ dias -> 10.85%
+    if dias >= 366:
+        return 10.85
+    # 270-365 dias -> 10.26%
+    elif dias >= 270:
+        return 10.26
+    # 180-269 dias -> 10.26%
     elif dias >= 180:
-        return 5.0
-    # 90 dias (3 meses) -> 4.5%
+        return 10.26
+    # 90-179 dias -> 5.0%
     elif dias >= 90:
-        return 4.5
-    # 60 dias (2 meses) -> 4.0%
+        return 5.0
+    # 60-89 dias -> 3.5%
     elif dias >= 60:
-        return 4.0
-    # 30 dias (1 mes) -> 3.0%
+        return 3.5
+    # 30-59 dias -> 2.0%
     elif dias >= 30:
-        return 3.0
-    # menos de 30 dias -> 0%
+        return 2.0
+    # menos de 30 dias -> 0% (sin tasa)
     else:
         return 0
 
@@ -117,11 +117,154 @@ def formatear_moneda(valor):
 # RUTAS DE AUTENTICACION
 # ====================================================================
 
-# ruta raiz que muestra la pagina principal del simulador
-@app.route('/')
+# ruta para mostrar el modulo de cmr puntos
+@app.route('/cmr-puntos')
+def cmr_puntos():
+    # renderizar el template cmr-puntos.html
+    return render_template('modules/cmr-puntos/cmr-puntos.html')
+
+
+# ruta raiz que muestra el simulador de inversion y procesa simulaciones
+# maneja GET (mostrar formulario) y POST (procesar y mostrar resultados)
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    # renderizar el template index.html que contiene el formulario del simulador
-    return render_template('index.html')
+    # inicializar variables
+    resultados = None
+    mostrar_resultados = False
+
+    # procesar el formulario cuando se hace POST
+    if request.method == 'POST':
+        # obtener el tipo de documento del formulario
+        tipo_documento = request.form.get('tipoDocumento')
+
+        # obtener el numero de documento del formulario
+        documento = request.form.get('documento')
+
+        # obtener el monto inicial a invertir del formulario
+        abono = request.form.get('abono')
+
+        # obtener el tipo de vencimiento (al vencimiento o abono periodico)
+        vencimiento = request.form.get('vencimiento')
+
+        # obtener la fecha de vencimiento del formulario (en formato yyyy-mm-dd)
+        fecha_plazo = request.form.get('plazo')
+
+        # validar que todos los campos obligatorios esten presentes
+        if not all([tipo_documento, documento, abono, vencimiento, fecha_plazo]):
+            # mostrar mensaje de error
+            flash('Todos los campos son obligatorios', 'error')
+            return render_template('index.html',
+                                 resultados=None,
+                                 mostrar_resultados=False)
+
+        # convertir el monto a numero decimal
+        try:
+            abono = float(abono)
+        except:
+            # si la conversion falla, mostrar error
+            flash('El monto debe ser un numero valido', 'error')
+            return render_template('index.html',
+                                 resultados=None,
+                                 mostrar_resultados=False)
+
+        # validar que el monto sea el minimo requerido por el banco
+        if abono < 200000:
+            # mostrar mensaje de error si es menor al minimo
+            flash('El monto minimo es $200.000', 'error')
+            return render_template('index.html',
+                                 resultados=None,
+                                 mostrar_resultados=False)
+
+        # calcular los dias entre hoy y la fecha de vencimiento seleccionada
+        dias = calcular_dias(fecha_plazo)
+
+        # validar que el plazo este dentro del rango permitido
+        if dias < 30 or dias > 1080:
+            # mostrar mensaje de error si no esta en el rango
+            flash('El plazo debe estar entre 30 y 1080 dias', 'error')
+            return render_template('index.html',
+                                 resultados=None,
+                                 mostrar_resultados=False)
+
+        # obtener la tasa de interes segun el numero de dias
+        tasa = obtener_tasa(dias)
+
+        # calcular los intereses generados
+        # formula: monto * tasa / 100
+        # ejemplo: 1.000.000 * 5 / 100 = 50.000
+        intereses = abono * tasa / 100
+
+        # calcular la retencion en la fuente
+        # el banco retiene el 4% de los intereses por impuestos
+        retencion = intereses * 0.04
+
+        # calcular el monto final que recibira el cliente
+        # es el capital inicial mas los intereses generados
+        monto_final = abono + intereses
+
+        # calcular la tasa efectiva anual
+        # convierte la tasa nominal del plazo a tasa anualizada
+        tasa_anual = calcular_tasa_anual(tasa, dias)
+
+        # obtener la fecha de hoy
+        hoy = datetime.today().date()
+
+        # formatear la fecha de hoy al formato dd/mm/yyyy
+        fecha_inicial_formato = hoy.strftime('%d/%m/%Y')
+
+        # formatear la fecha de vencimiento al formato dd/mm/yyyy
+        fecha_vencimiento_formato = formatear_fecha(fecha_plazo)
+
+        # crear un diccionario que mapea los valores de vencimiento a sus etiquetas
+        vencimiento_labels = {
+            'vencimiento': 'Al vencimiento',  # el interes se paga al final
+            'periodico': 'Abono periodico'     # el interes se paga periodicamente
+        }
+
+        # obtener la etiqueta correspondiente al tipo de vencimiento seleccionado
+        vencimiento_label = vencimiento_labels.get(vencimiento, 'Al vencimiento')
+
+        # guardar todos los resultados calculados en la sesion del usuario
+        # esto permite pasar los datos al template sin exponer la url
+        resultados = {
+            # monto total formateado como moneda colombiana
+            'montoTotalGrande': formatear_moneda(monto_final),
+
+            # numero de dias del plazo
+            'plazoResultado': dias,
+
+            # intereses totales formateados
+            'rendimientosTotal': formatear_moneda(intereses),
+
+            # retencion en la fuente formateada
+            'retencion': formatear_moneda(retencion),
+
+            # monto inicial formateado
+            'valorInversion': formatear_moneda(abono),
+
+            # tipo de pago de rendimientos
+            'pagoRendimientos': vencimiento_label,
+
+            # tasa anual con 2 decimales
+            'tasaAnual': f'{tasa_anual:.2f}%',
+
+            # fecha inicial formateada
+            'fechaInicial': fecha_inicial_formato,
+
+            # fecha de vencimiento formateada
+            'fechaVencimiento': fecha_vencimiento_formato
+        }
+
+        # guardar en la sesion
+        session['resultados'] = resultados
+
+        # marcar que se deben mostrar los resultados
+        mostrar_resultados = True
+
+    # renderizar el template con formulario o resultados segun corresponda
+    return render_template('index.html',
+                         resultados=resultados,
+                         mostrar_resultados=mostrar_resultados)
 
 
 # ruta para procesar el login de usuarios registrados
@@ -217,144 +360,20 @@ def logout():
 # RUTAS DEL SIMULADOR CDAT
 # ====================================================================
 
-# ruta para procesar la simulacion del cdat
-# recibe los datos del formulario y calcula los resultados
+# ruta para mostrar el formulario de inversion y procesar simulaciones
+# maneja GET (mostrar formulario) y POST (procesar y mostrar resultados)
+# rutas legacy para compatibilidad (redireccionan a la ruta principal)
+@app.route('/inversion', methods=['GET', 'POST'])
 @app.route('/simular', methods=['POST'])
-def simular():
-    # obtener el tipo de documento del formulario
-    tipo_documento = request.form.get('tipoDocumento')
-
-    # obtener el numero de documento del formulario
-    documento = request.form.get('documento')
-
-    # obtener el monto inicial a invertir del formulario
-    abono = request.form.get('abono')
-
-    # obtener el tipo de vencimiento (al vencimiento o abono periodico)
-    vencimiento = request.form.get('vencimiento')
-
-    # obtener la fecha de vencimiento del formulario (en formato yyyy-mm-dd)
-    fecha_plazo = request.form.get('plazo')
-
-    # validar que todos los campos obligatorios esten presentes
-    if not all([tipo_documento, documento, abono, vencimiento, fecha_plazo]):
-        # mostrar mensaje de error
-        flash('Todos los campos son obligatorios', 'error')
-        # redirigir de vuelta al simulador
-        return redirect(url_for('index'))
-
-    # convertir el monto a numero decimal
-    try:
-        abono = float(abono)
-    except:
-        # si la conversion falla, mostrar error
-        flash('El monto debe ser un numero valido', 'error')
-        return redirect(url_for('index'))
-
-    # validar que el monto sea el minimo requerido por el banco
-    if abono < 200000:
-        # mostrar mensaje de error si es menor al minimo
-        flash('El monto minimo es $200.000', 'error')
-        return redirect(url_for('index'))
-
-    # calcular los dias entre hoy y la fecha de vencimiento seleccionada
-    dias = calcular_dias(fecha_plazo)
-
-    # validar que el plazo este dentro del rango permitido
-    if dias < 30 or dias > 1080:
-        # mostrar mensaje de error si no esta en el rango
-        flash('El plazo debe estar entre 30 y 1080 dias', 'error')
-        return redirect(url_for('index'))
-
-    # obtener la tasa de interes segun el numero de dias
-    tasa = obtener_tasa(dias)
-
-    # calcular los intereses generados
-    # formula: monto * tasa / 100
-    # ejemplo: 1.000.000 * 5 / 100 = 50.000
-    intereses = abono * tasa / 100
-
-    # calcular la retencion en la fuente
-    # el banco retiene el 4% de los intereses por impuestos
-    retencion = intereses * 0.04
-
-    # calcular el monto final que recibira el cliente
-    # es el capital inicial mas los intereses generados
-    monto_final = abono + intereses
-
-    # calcular la tasa efectiva anual
-    # convierte la tasa nominal del plazo a tasa anualizada
-    tasa_anual = calcular_tasa_anual(tasa, dias)
-
-    # obtener la fecha de hoy
-    hoy = datetime.today().date()
-
-    # formatear la fecha de hoy al formato dd/mm/yyyy
-    fecha_inicial_formato = hoy.strftime('%d/%m/%Y')
-
-    # formatear la fecha de vencimiento al formato dd/mm/yyyy
-    fecha_vencimiento_formato = formatear_fecha(fecha_plazo)
-
-    # crear un diccionario que mapea los valores de vencimiento a sus etiquetas
-    vencimiento_labels = {
-        'vencimiento': 'Al vencimiento',  # el interes se paga al final
-        'periodico': 'Abono periodico'     # el interes se paga periodicamente
-    }
-
-    # obtener la etiqueta correspondiente al tipo de vencimiento seleccionado
-    vencimiento_label = vencimiento_labels.get(vencimiento, 'Al vencimiento')
-
-    # guardar todos los resultados calculados en la sesion del usuario
-    # esto permite pasar los datos al template sin exponer la url
-    session['resultados'] = {
-        # monto total formateado como moneda colombiana
-        'montoTotalGrande': formatear_moneda(monto_final),
-
-        # numero de dias del plazo
-        'plazoResultado': dias,
-
-        # intereses totales formateados
-        'rendimientosTotal': formatear_moneda(intereses),
-
-        # retencion en la fuente formateada
-        'retencion': formatear_moneda(retencion),
-
-        # monto inicial formateado
-        'valorInversion': formatear_moneda(abono),
-
-        # tipo de pago de rendimientos
-        'pagoRendimientos': vencimiento_label,
-
-        # tasa anual con 2 decimales
-        'tasaAnual': f'{tasa_anual:.2f}%',
-
-        # fecha inicial formateada
-        'fechaInicial': fecha_inicial_formato,
-
-        # fecha de vencimiento formateada
-        'fechaVencimiento': fecha_vencimiento_formato
-    }
-
-    # redirigir a la pagina de resultados para mostrar los calculos
-    return redirect(url_for('resultados'))
+def inversion_redirect():
+    # redirigir a la ruta principal
+    return redirect(url_for('index'))
 
 
-# ruta para mostrar los resultados de la simulacion
 @app.route('/resultados')
 def resultados():
-    # obtener los resultados almacenados en la sesion
-    resultados = session.get('resultados')
-
-    # validar que existan resultados en la sesion
-    if not resultados:
-        # si no hay resultados, mostrar mensaje de error
-        flash('No hay simulacion para mostrar', 'error')
-        # redirigir al simulador
-        return redirect(url_for('index'))
-
-    # renderizar el template de resultados y pasar los datos
-    # resultados={resultados} hace que los datos esten disponibles en el template
-    return render_template('resultados.html', resultados=resultados)
+    # redirigir a la ruta principal
+    return redirect(url_for('index'))
 
 
 # ====================================================================
