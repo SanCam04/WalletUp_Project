@@ -1,0 +1,151 @@
+<!-- Seguros Falabella Section -->
+<link href="{{ url_for('static', filename='css/submenu-seguros.css') }}" rel="stylesheet">
+
+<!-- Vista del Carrusel (inicial) -->
+<div id="carruselView" class="seguros-section">
+    <div class="container-fluid">
+
+        <!-- Imagen 1: Menu Principal -->
+        <div class="seguros-imagen-container">
+            <img src="{{ url_for('static', filename='images/seguros-menu.png') }}" alt="Seguros Falabella" class="seguros-imagen-full">
+        </div>
+
+        <!-- Imagen 2: Contenido -->
+        <div class="seguros-imagen-container">
+            <img src="{{ url_for('static', filename='images/seguros-contenido.png') }}" alt="Haz tu vida más tranquila" class="seguros-imagen-full">
+        </div>
+
+        <!-- Carrusel de Seguros con Bootstrap Cards -->
+        <div class="carrusel-section">
+            <div class="carrusel-container">
+                <!-- Flecha Izquierda -->
+                <button class="arrow-btn arrow-left" id="arrowLeft">❮</button>
+
+                <!-- Wrapper para las cards -->
+                <div class="cards-wrapper" id="cardsWrapper">
+                    <div class="cards-track" id="cardsTrack">
+
+                        <!-- Card 1: Seguro de Fraude -->
+                        <div class="card seguro-card" data-module="fraude" style="width: 18rem;">
+                            <img src="https://images.ctfassets.net/ex6ts2p2j0ib/QNxNbkIGK6TjWaaNFl8Y9/b3cca9ec34ceaf2994b21f3b3d749274/SegurosMesa_de_trabajo_10_copia_29.png?w=256&q=75" class="card-img-top" alt="Seguro de Fraude">
+                            <div class="card-body">
+                                <h5 class="card-title">Seguro de Fraude</h5>
+                                <p class="card-subtitle">Protegemos tu Tarjeta CMR y 3 más</p>
+                                <p class="card-text">Te cubre en caso de hurto, extravío, clonación, compras no autorizadas en páginas web y atraco en cajero automático.</p>
+                                <a href="#" class="btn btn-outline-primary seguro-link">Conoce más aquí</a>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Seguro Cuota Protegida -->
+                        <div class="card seguro-card" data-module="cuota-protegida" style="width: 18rem;">
+                            <img src="http://images.ctfassets.net/ex6ts2p2j0ib/7yIYd6T5ZYDxthtp03s3dM/ce8f0ff912f03ce67e04e82ac6253428/SegurosMesa_de_trabajo_10_copia_30.png?w=256&q=75" class="card-img-top" alt="Seguro Cuota Protegida">
+                            <div class="card-body">
+                                <h5 class="card-title">Seguro Cuota Protegida</h5>
+                                <p class="card-subtitle">Cubrimos 6 cuotas de tu Tarjeta</p>
+                                <p class="card-text">En caso de despido sin justa causa si eres empleado o en caso de incapacidad temporal si eres independiente.</p>
+                                <a href="#" class="btn btn-outline-primary seguro-link">Conoce más aquí</a>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Seguro de Auto -->
+                        <div class="card seguro-card" data-module="auto" style="width: 18rem;">
+                            <img src="https://images.ctfassets.net/ex6ts2p2j0ib/3tXu4Q989f86KAbQc74eeY/5a4adff0853acfb84262be24d697caf0/SegurosMesa_de_trabajo_10_copia_37.png?w=256&q=75" class="card-img-top" alt="Seguro de Auto">
+                            <div class="card-body">
+                                <h5 class="card-title">Seguro de Auto</h5>
+                                <p class="card-subtitle">Recibe protección y asistencias</p>
+                                <p class="card-text">Protegiendo tu carro en caso de robo, accidente y demás eventualidades, con los mejores beneficios y sin pagar de más.</p>
+                                <a href="#" class="btn btn-outline-primary seguro-link">Conoce más aquí</a>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Seguro Crédito de Libre Inversión -->
+                        <div class="card seguro-card" data-module="credito-libre-inversion" style="width: 18rem;">
+                            <img src="https://images.ctfassets.net/ex6ts2p2j0ib/5PRBgAIOii9z6f0Ckt4k0i/6014ab9be1ca8712208a7b154ae3e7e6/SegurosMesa_de_trabajo_10_copia_32.png?w=256&q=75" class="card-img-top" alt="Seguro Crédito de Libre Inversión">
+                            <div class="card-body">
+                                <h5 class="card-title">Seguro Crédito de Libre Inversión</h5>
+                                <p class="card-subtitle">Seguro de desempleo y accidentes</p>
+                                <p class="card-text">Obtén protección, seguridad y tranquilidad cuando más lo necesites, tanto como empleado como independiente.</p>
+                                <a href="#" class="btn btn-outline-primary seguro-link">Conoce más aquí</a>
+                            </div>
+                        </div>
+
+                        <!-- Card 5: Seguro de Vida -->
+                        <div class="card seguro-card" data-module="vida" style="width: 18rem;">
+                            <img src="https://images.ctfassets.net/ex6ts2p2j0ib/6gTDeDzblbQvDdKLg1CUpv/89731aa8f7bbb5c8f28b7dcdbb7686fc/SegurosMesa_de_trabajo_10_copia_33.png?w=256&q=75" class="card-img-top" alt="Seguro de Vida">
+                            <div class="card-body">
+                                <h5 class="card-title">Seguro de Vida</h5>
+                                <p class="card-subtitle">Protege a tu familia</p>
+                                <p class="card-text">Brinda tranquilidad a tus seres queridos con coberturas que se adaptan a tus necesidades y presupuesto.</p>
+                                <a href="#" class="btn btn-outline-primary seguro-link">Conoce más aquí</a>
+                            </div>
+                        </div>
+
+                        <!-- Card 6: Seguro de Emergencias Médicas -->
+                        <div class="card seguro-card" data-module="emergencias-medicas" style="width: 18rem;">
+                            <img src="https://images.ctfassets.net/ex6ts2p2j0ib/2sXhVHOnpypgY2hgTloGqB/c13fb8d1105e783da7f41d099163eece/SegurosMesa_de_trabajo_10_copia_34.png?w=256&q=75" class="card-img-top" alt="Seguro de Emergencias Médicas">
+                            <div class="card-body">
+                                <h5 class="card-title">Seguro de Emergencias Médicas</h5>
+                                <p class="card-subtitle">Protege el bienestar y salud de tu familia</p>
+                                <p class="card-text">Atención médida domiciliaria sin costo adicional y protección en momentos difíciles ante cualquier eventualidad.</p>
+                                <a href="#" class="btn btn-outline-primary seguro-link">Conoce más aquí</a>
+                            </div>
+                        </div>
+
+                        <!-- Card 7: Seguro Mascotas -->
+                        <div class="card seguro-card" data-module="mascotas" style="width: 18rem;">
+                            <img src="http://images.ctfassets.net/ex6ts2p2j0ib/6wqEXQnsFmvGOKlodjhm7X/2628a89c766f52d584b6db3039b5671f/SegurosMesa_de_trabajo_10_copia_35.png?w=256&q=75" class="card-img-top" alt="Seguro Mascotas">
+                            <div class="card-body">
+                                <h5 class="card-title">Seguro Mascotas</h5>
+                                <p class="card-subtitle">Protege el bienestar de tu fiel amigo</p>
+                                <p class="card-text">Te acompañamos en el cuidado de tu mascota, brindándote la mejor atención, en caso de accidente o enfermedad.</p>
+                                <a href="#" class="btn btn-outline-primary seguro-link">Conoce más aquí</a>
+                            </div>
+                        </div>
+
+                        <!-- Card 8: Seguro de Hogar -->
+                        <div class="card seguro-card" data-module="hogar" style="width: 18rem;">
+                            <img src="https://images.ctfassets.net/ex6ts2p2j0ib/2XPYN8TF6RoKlDmvt8SQnz/99b7ccab9238b0cb71e0dc9f922973d6/SegurosMesa_de_trabajo_10_copia_36.png?w=256&q=75" class="card-img-top" alt="Seguro de Hogar">
+                            <div class="card-body">
+                                <h5 class="card-title">Seguro de Hogar</h5>
+                                <p class="card-subtitle">Descubre como proteger tu hogar</p>
+                                <p class="card-text">Con el seguro de hogar protege tu casa, electrodomésticos y muebles de incendio, robo, terremoto y demás eventualidades.</p>
+                                <a href="#" class="btn btn-outline-primary seguro-link">Conoce más aquí</a>
+                            </div>
+                        </div>
+
+                        <!-- Card 9: Seguro de Carro por Kilómetro -->
+                        <div class="card seguro-card" data-module="carro-kilometro" style="width: 18rem;">
+                            <img src="https://images.ctfassets.net/ex6ts2p2j0ib/3tXu4Q989f86KAbQc74eeY/5a4adff0853acfb84262be24d697caf0/SegurosMesa_de_trabajo_10_copia_37.png?w=256&q=75" class="card-img-top" alt="Seguro de Carro por Kilómetro">
+                            <div class="card-body">
+                                <h5 class="card-title">Seguro de Carro por Kilómetro</h5>
+                                <p class="card-subtitle">¿Usas poco tu carro? Este es el seguro para ti</p>
+                                <p class="card-text">Paga solo por los kilómetros que usas y conduce seguro con las mismas protecciones de un seguro de carro tradicional.</p>
+                                <a href="#" class="btn btn-outline-primary seguro-link">Conoce más aquí</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Flecha Derecha -->
+                <button class="arrow-btn arrow-right" id="arrowRight">❯</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Vista del Módulo (se muestra cuando se selecciona una card) -->
+<div id="moduloView" class="modulo-section" style="display: none;">
+    <div class="container-fluid">
+        <!-- Botón Volver -->
+        <div class="modulo-header">
+            <button id="btnVolver" class="btn btn-secondary btn-volver">
+                <span class="arrow">←</span> Volver al menú
+            </button>
+        </div>
+
+        <!-- Contenido del módulo -->
+        <div id="moduloContent" class="modulo-content"></div>
+    </div>
+</div>

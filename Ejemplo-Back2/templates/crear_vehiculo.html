@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3 class="mb-3">Agregar Nuevo Vehículo</h3>
+
+<form method="POST" style="max-width: 500px;">
+  <div class="mb-3">
+    <label for="tipo_vehiculo" class="form-label">Tipo de Vehículo:</label>
+    <input type="text" class="form-control" id="tipo_vehiculo" name="tipo_vehiculo" required
+      placeholder="Ej: Toyota, BMW, Mazda">
+  </div>
+
+  <div class="mb-3">
+    <label for="placa" class="form-label">Placa:</label>
+    <input type="text" class="form-control" id="placa" name="placa" required placeholder="Ej: ABC-123">
+  </div>
+
+  <button type="submit" class="btn btn-success">Guardar Vehículo</button>
+  <a href="/" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

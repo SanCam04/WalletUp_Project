@@ -23,29 +23,7 @@ def calculadora():
  )
 @app.route('/imc')
 def imc():
- return render_template(
- 'imc.html',
- )
-@app.route('/CalImc', methods=['POST'])
-def CalImc():
- altura = float(request.form["altura"])
- peso = float(request.form["peso"])
- imc = peso / (altura * altura)
- if imc < 18.5:
-  categoria = "Bajo peso"
- elif imc < 25:
-  categoria = "Peso normal"
- elif imc < 30:
-  categoria = "Sobrepeso"
- else:
-  categoria = "Obesidad"
- return render_template(
-  'imc.html',
-  imc = round(imc, 2),
-  categoria = categoria,
-  peso = peso,
-  altura = altura
- )
+ return render_template('imc.html')
 @app.route('/informacion')
 def informacion():
  return render_template(

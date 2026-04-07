@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Nuevo Usuario</h3>
+<form method="POST">
+    <input type="text" name="nombre" class="form-control mb-2" placeholder="Nombre" required>
+    <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
+    <button class="btn btn-primary">Guardar</button>
+</form>
+{% endblock %}

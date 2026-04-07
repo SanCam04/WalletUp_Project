@@ -124,6 +124,38 @@ def cmr_puntos():
     return render_template('modules/cmr-puntos/cmr-puntos.html')
 
 
+# ruta para mostrar el modulo de seguros
+@app.route('/seguros')
+def seguros():
+    # renderizar el template seguros.html
+    return render_template('modules/seguros/seguros.html')
+
+
+# ruta para cargar dinamicamente los modulos de seguros
+# ejemplo: /seguros/modulo/fraude -> carga el contenido de fraude.html
+@app.route('/seguros/modulo/<modulo>')
+def seguro_modulo(modulo):
+    # mapeo de módulos a sus templates
+    modulos_validos = {
+        'fraude': 'modules/seguros/modulos/fraude/fraude.html',
+        'cuota-protegida': 'modules/seguros/modulos/cuota-protegida/cuota-protegida.html',
+        'auto': 'modules/seguros/modulos/auto/auto.html',
+        'credito-libre-inversion': 'modules/seguros/modulos/credito-libre-inversion/credito-libre-inversion.html',
+        'vida': 'modules/seguros/modulos/vida/vida.html',
+        'emergencias-medicas': 'modules/seguros/modulos/emergencias-medicas/emergencias-medicas.html',
+        'mascotas': 'modules/seguros/modulos/mascotas/mascotas.html',
+        'hogar': 'modules/seguros/modulos/hogar/hogar.html',
+        'carro-kilometro': 'modules/seguros/modulos/carro-kilometro/carro-kilometro.html',
+    }
+
+    # validar que el módulo solicitado sea válido
+    if modulo not in modulos_validos:
+        return jsonify({'error': 'Módulo no encontrado'}), 404
+
+    # renderizar solo el contenido del módulo (sin base.html)
+    return render_template(modulos_validos[modulo])
+
+
 # ruta raiz que muestra el simulador de inversion y procesa simulaciones
 # maneja GET (mostrar formulario) y POST (procesar y mostrar resultados)
 @app.route('/', methods=['GET', 'POST'])

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3 class="mb-3">Gestión de Vehículos</h3>
+<a href="/" class="btn btn-secondary mb-3">← Volver a Usuarios</a>
+<a href="/crear_vehiculo" class="btn btn-success mb-3">+ Nuevo Vehículo</a>
+
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Tipo de Vehículo</th>
+        <th>Placa</th>
+        <th>Acciones</th>
+    </tr>
+    {% for vehiculo in vehiculos %}
+    <tr>
+        <td>{{ vehiculo.id }}</td>
+        <td>{{ vehiculo.tipo_vehiculo }}</td>
+        <td>{{ vehiculo.placa }}</td>
+        <td>
+            <a href="/editar_vehiculo/{{ vehiculo.id }}" class="btn btn-warning btn-sm">Editar</a>
+            <a href="/eliminar_vehiculo/{{ vehiculo.id }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -24,6 +24,14 @@ document.addEventListener("DOMContentLoaded", function() {
     if (btnDiv) btnDiv.addEventListener("click", function () { calcular("/"); });
     if (btnSum) btnSum.addEventListener("click", function () { calcular("+"); });
     if (btnRes) btnRes.addEventListener("click", function () { calcular("-"); });
+
+    var btnCalcularIMC = document.getElementById("btnCalcularIMC");
+    if (btnCalcularIMC) {
+        btnCalcularIMC.addEventListener("click", function() {
+            calcularIMC();
+        });
+    }
+
 });
 
 function calcular(op) {
@@ -43,5 +51,55 @@ function calcular(op) {
     else if (op === "-") r = n1 - n2;
 
     mensajeCalc.innerHTML = '<div class="alert alert-info">Resultado: ' + r + "</div>";
+}
+
+function calcularIMC() {
+    var pesoInput = document.getElementById("peso");
+    var alturaInput = document.getElementById("altura");
+    var mensajeIMC = document.getElementById("mensajeIMC");
+
+    var peso = parseFloat(pesoInput.value);
+    var altura = parseFloat(alturaInput.value);
+
+    // Validar que los campos tengan valores válidos
+    if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
+        mensajeIMC.innerHTML = '<div class="alert alert-danger">Por favor ingresa peso y altura válidos (números positivos)</div>';
+        return;
+    }
+
+    // Validar que la altura esté en formato correcto (entre 0.5 y 3 metros)
+    if (altura > 3) {
+        mensajeIMC.innerHTML = '<div class="alert alert-danger">⚠️ La altura debe estar en metros (ej: 1.75, no 175). Parece que ingresaste cm en lugar de metros.</div>';
+        return;
+    }
+
+    if (altura < 0.5) {
+        mensajeIMC.innerHTML = '<div class="alert alert-danger">La altura debe ser mayor a 0.5 metros</div>';
+        return;
+    }
+
+    // Calcular IMC
+    var imc = peso / (altura * altura);
+
+    // Determinar categoría
+    var categoria;
+    if (imc < 18.5) {
+        categoria = "Bajo peso";
+    } else if (imc < 25) {
+        categoria = "Peso normal";
+    } else if (imc < 30) {
+        categoria = "Sobrepeso";
+    } else {
+        categoria = "Obesidad";
+    }
+
+    // Mostrar resultados
+    mensajeIMC.innerHTML = '<div class="alert alert-success">' +
+        '<h5>Resultados:</h5>' +
+        '<p>Peso: <strong>' + peso + ' kg</strong></p>' +
+        '<p>Altura: <strong>' + altura + ' m</strong></p>' +
+        '<p>IMC: <strong>' + imc.toFixed(2) + '</strong></p>' +
+        '<p>Categoría: <strong>' + categoria + '</strong></p>' +
+        '</div>';
 }
 
