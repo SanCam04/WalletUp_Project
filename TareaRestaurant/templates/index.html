@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block titulo %}Gestion Restaurante Dashboard{% endblock %}
+
+{% block contenido %}
+
+<!-- Seccion de titulo principal -->
+<div class="mb-5">
+    <!-- Titulo de bienvenida -->
+    <h1 class="text-primary display-4">Panel de Pedidos</h1>
+
+    <!-- Subtitulo descriptivo -->
+    <p class="lead">Administra los platos de tus pedidos y consulta el resumen</p>
+</div>
+
+<!-- SECCION 1 AGREGAR DETALLES A PEDIDOS -->
+<div class="row mt-5 g-4">
+    <!-- Columna unica para agregar detalles -->
+    <div class="col-12">
+        <!-- Tarjeta de detalles de pedidos -->
+        <div class="card shadow-sm">
+            <!-- Encabezado de la tarjeta -->
+            <div class="card-header bg-danger text-white">
+                <!-- Titulo de la seccion -->
+                <h5 class="mb-0">Agregar Plato a Pedido</h5>
+            </div>
+
+            <!-- Cuerpo de la tarjeta -->
+            <div class="card-body">
+                <!-- Formulario para agregar detalles -->
+                <form action="{{ url_for('agregar_detalle') }}" method="POST" class="row g-3">
+                    <!-- Grupo del campo pedido -->
+                    <div class="col-md-4">
+                        <!-- Etiqueta del campo -->
+                        <label for="pedido_select" class="form-label">Selecciona Pedido</label>
+
+                        <!-- Select de pedidos disponibles -->
+                        <select class="form-select" id="pedido_select" name="pedido_id" required>
+                            <!-- Opcion por defecto -->
+                            <option value="">Seleccionar pedido</option>
+
+                            <!-- Iteracion sobre pedidos -->
+                            {% for pedido in pedidos %}
+                                <!-- Opcion de pedido -->
+                                <option value="{{ pedido['id'] }}">Pedido {{ pedido['id'] }} - {{ pedido['cliente_nombre'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Grupo del campo plato -->
+                    <div class="col-md-4">
+                        <!-- Etiqueta del campo -->
+                        <label for="plato_select" class="form-label">Selecciona Plato</label>
+
+                        <!-- Select de platos disponibles -->
+                        <select class="form-select" id="plato_select" name="plato_id" required>
+                            <!-- Opcion por defecto -->
+                            <option value="">Seleccionar plato</option>
+
+                            <!-- Iteracion sobre platos -->
+                            {% for plato in platos %}
+                                <!-- Opcion de plato -->
+                                <option value="{{ plato['id'] }}">{{ plato['nombre'] }} - ${{ "%.2f"|format(plato['precio']) }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Grupo del campo cantidad -->
+                    <div class="col-md-2">
+                        <!-- Etiqueta del campo -->
+                        <label for="cantidad_input" class="form-label">Cantidad</label>
+
+                        <!-- Input de numero para cantidad -->
+                        <input type="number" class="form-control" id="cantidad_input" name="cantidad" min="1" required>
+                    </div>
+
+                    <!-- Grupo del boton envio -->
+                    <div class="col-md-2 d-flex align-items-end">
+                        <!-- Boton de envio del formulario -->
+                        <button type="submit" class="btn btn-danger w-100">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SECCION 5 CONSULTAR PEDIDOS CON DETALLES -->
+<div class="row mt-5 g-4">
+    <!-- Columna unica para consultar pedidos -->
+    <div class="col-12">
+        <!-- Tarjeta de consulta de pedidos -->
+        <div class="card shadow-sm">
+            <!-- Encabezado de la tarjeta -->
+            <div class="card-header bg-primary text-white">
+                <!-- Titulo de la seccion -->
+                <h5 class="mb-0">Consultar Pedidos con Detalles</h5>
+            </div>
+
+            <!-- Cuerpo de la tarjeta -->
+            <div class="card-body">
+                <!-- Boton para cargar pedidos -->
+                <button id="btn_consultar" class="btn btn-primary mb-3">Cargar Pedidos</button>
+
+                <!-- Contenedor para mostrar resultados -->
+                <div id="resultados_pedidos"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

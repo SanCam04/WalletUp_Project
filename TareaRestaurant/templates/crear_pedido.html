@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block titulo %}Crear Pedido{% endblock %}
+
+{% block contenido %}
+
+<!-- Seccion de titulo principal -->
+<div class="mb-5">
+    <!-- Titulo de la pagina -->
+    <h1 class="text-primary display-4">Crear Pedido</h1>
+
+    <!-- Subtitulo descriptivo -->
+    <p class="lead">Crea un nuevo pedido para un cliente</p>
+</div>
+
+<!-- Grid de una columna para el formulario -->
+<div class="row">
+    <!-- Columna del formulario -->
+    <div class="col-lg-6 mx-auto">
+        <!-- Tarjeta del formulario -->
+        <div class="card shadow-sm">
+            <!-- Encabezado de la tarjeta -->
+            <div class="card-header bg-warning text-dark">
+                <!-- Titulo del formulario -->
+                <h5 class="mb-0">Nuevo Pedido</h5>
+            </div>
+
+            <!-- Cuerpo de la tarjeta -->
+            <div class="card-body">
+                <!-- Formulario para crear pedido -->
+                <form action="{{ url_for('guardar_pedido') }}" method="POST" class="needs-validation">
+                    <!-- Grupo del campo cliente -->
+                    <div class="mb-3">
+                        <!-- Etiqueta del campo -->
+                        <label for="cliente_select" class="form-label">Selecciona Cliente</label>
+
+                        <!-- Select de clientes disponibles -->
+                        <select class="form-select" id="cliente_select" name="cliente_id" required>
+                            <!-- Opcion por defecto -->
+                            <option value="">Seleccionar cliente</option>
+
+                            <!-- Iteracion sobre clientes -->
+                            {% for cliente in clientes %}
+                                <!-- Opcion de cliente -->
+                                <option value="{{ cliente['id'] }}">{{ cliente['nombre'] }} - Tel: {{ cliente['telefono'] }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <!-- Feedback de validacion -->
+                        <div class="invalid-feedback">
+                            <!-- Mensaje de error -->
+                            Por favor selecciona un cliente
+                        </div>
+                    </div>
+
+                    <!-- Grupo del campo fecha -->
+                    <div class="mb-3">
+                        <!-- Etiqueta del campo -->
+                        <label for="fecha_pedido" class="form-label">Fecha del Pedido</label>
+
+                        <!-- Input de fecha -->
+                        <input type="date" class="form-control" id="fecha_pedido" name="fecha" required>
+
+                        <!-- Feedback de validacion -->
+                        <div class="invalid-feedback">
+                            <!-- Mensaje de error -->
+                            Por favor selecciona una fecha
+                        </div>
+                    </div>
+
+                    <!-- Grupo de botones -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <!-- Boton de cancelar -->
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
+
+                        <!-- Boton de envio del formulario -->
+                        <button type="submit" class="btn btn-warning">Crear Pedido</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

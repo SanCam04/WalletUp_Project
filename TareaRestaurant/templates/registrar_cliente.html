@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block titulo %}Registrar Cliente{% endblock %}
+
+{% block contenido %}
+
+<!-- Seccion de titulo principal -->
+<div class="mb-5">
+    <!-- Titulo de la pagina -->
+    <h1 class="text-primary display-4">Registrar Cliente</h1>
+
+    <!-- Subtitulo descriptivo -->
+    <p class="lead">Agrega un nuevo cliente al sistema</p>
+</div>
+
+<!-- Grid de una columna para el formulario -->
+<div class="row">
+    <!-- Columna del formulario -->
+    <div class="col-lg-6 mx-auto">
+        <!-- Tarjeta del formulario -->
+        <div class="card shadow-sm">
+            <!-- Encabezado de la tarjeta -->
+            <div class="card-header bg-success text-white">
+                <!-- Titulo del formulario -->
+                <h5 class="mb-0">Nuevo Cliente</h5>
+            </div>
+
+            <!-- Cuerpo de la tarjeta -->
+            <div class="card-body">
+                <!-- Formulario para registrar cliente -->
+                <form action="{{ url_for('guardar_cliente') }}" method="POST" class="needs-validation">
+                    <!-- Grupo del campo nombre -->
+                    <div class="mb-3">
+                        <!-- Etiqueta del campo -->
+                        <label for="nombre_cliente" class="form-label">Nombre del Cliente</label>
+
+                        <!-- Input de texto para nombre -->
+                        <input type="text" class="form-control" id="nombre_cliente" name="nombre" placeholder="Ej: Juan Perez" required>
+
+                        <!-- Feedback de validacion -->
+                        <div class="invalid-feedback">
+                            <!-- Mensaje de error -->
+                            Por favor ingresa el nombre del cliente
+                        </div>
+                    </div>
+
+                    <!-- Grupo del campo telefono -->
+                    <div class="mb-3">
+                        <!-- Etiqueta del campo -->
+                        <label for="telefono_cliente" class="form-label">Telefono</label>
+
+                        <!-- Input de texto para telefono -->
+                        <input type="text" class="form-control" id="telefono_cliente" name="telefono" placeholder="Ej: 3001234567" required>
+
+                        <!-- Feedback de validacion -->
+                        <div class="invalid-feedback">
+                            <!-- Mensaje de error -->
+                            Por favor ingresa el telefono del cliente
+                        </div>
+                    </div>
+
+                    <!-- Grupo de botones -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <!-- Boton de cancelar -->
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
+
+                        <!-- Boton de envio del formulario -->
+                        <button type="submit" class="btn btn-success">Guardar Cliente</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

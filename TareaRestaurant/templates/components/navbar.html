@@ -1,0 +1,34 @@
+<!-- BLOQUE NAVEGACION PRINCIPAL -->
+<!-- Navegacion principal de la aplicacion -->
+<nav class="navbar navbar-light d-flex justify-content-center" style="background-color: #FFD580;">
+    <!-- Contenedor de la navegacion -->
+    <div class="d-flex align-items-center gap-4">
+        <!-- Logo de McDonalds alineado a la izquierda -->
+        <a class="navbar-brand mb-0" href="{{ url_for('index') }}">
+            <!-- Logo de Corral -->
+            <img src="https://i.revistapym.com.co/old/2016/10/logo-corral-1.png" alt="Corral" width="80" height="80" class="d-inline-block align-text-top">
+        </a>
+
+        <!-- Menu de navegacion -->
+        <!-- Lista de menu -->
+        <ul class="navbar-nav d-flex flex-row gap-3 mb-0">
+            <!-- Item menu registrar cliente -->
+            <li class="nav-item">
+                <!-- Link a registrar cliente -->
+                <a class="nav-link" href="{{ url_for('registrar_cliente') }}">Registrar Cliente</a>
+            </li>
+
+            <!-- Item menu registrar plato -->
+            <li class="nav-item">
+                <!-- Link a registrar plato -->
+                <a class="nav-link" href="{{ url_for('registrar_plato') }}">Registrar Plato</a>
+            </li>
+
+            <!-- Item menu crear pedido -->
+            <li class="nav-item">
+                <!-- Link a crear pedido -->
+                <a class="nav-link" href="{{ url_for('crear_pedido') }}">Crear Pedido</a>
+            </li>
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block titulo %}Registrar Plato{% endblock %}
+
+{% block contenido %}
+
+<!-- Seccion de titulo principal -->
+<div class="mb-5">
+    <!-- Titulo de la pagina -->
+    <h1 class="text-primary display-4">Registrar Plato</h1>
+
+    <!-- Subtitulo descriptivo -->
+    <p class="lead">Agrega un nuevo plato al menu</p>
+</div>
+
+<!-- Grid de una columna para el formulario -->
+<div class="row">
+    <!-- Columna del formulario -->
+    <div class="col-lg-6 mx-auto">
+        <!-- Tarjeta del formulario -->
+        <div class="card shadow-sm">
+            <!-- Encabezado de la tarjeta -->
+            <div class="card-header bg-info text-white">
+                <!-- Titulo del formulario -->
+                <h5 class="mb-0">Nuevo Plato</h5>
+            </div>
+
+            <!-- Cuerpo de la tarjeta -->
+            <div class="card-body">
+                <!-- Formulario para registrar plato -->
+                <form action="{{ url_for('guardar_plato') }}" method="POST" class="needs-validation">
+                    <!-- Grupo del campo nombre plato -->
+                    <div class="mb-3">
+                        <!-- Etiqueta del campo -->
+                        <label for="nombre_plato" class="form-label">Nombre del Plato</label>
+
+                        <!-- Input de texto para nombre plato -->
+                        <input type="text" class="form-control" id="nombre_plato" name="nombre" placeholder="Ej: Hamburguesa Clasica" required>
+
+                        <!-- Feedback de validacion -->
+                        <div class="invalid-feedback">
+                            <!-- Mensaje de error -->
+                            Por favor ingresa el nombre del plato
+                        </div>
+                    </div>
+
+                    <!-- Grupo del campo precio plato -->
+                    <div class="mb-3">
+                        <!-- Etiqueta del campo -->
+                        <label for="precio_plato" class="form-label">Precio</label>
+
+                        <!-- Input de numero para precio -->
+                        <input type="number" class="form-control" id="precio_plato" name="precio" step="0.01" placeholder="Ej: 15000" required>
+
+                        <!-- Feedback de validacion -->
+                        <div class="invalid-feedback">
+                            <!-- Mensaje de error -->
+                            Por favor ingresa un precio valido
+                        </div>
+                    </div>
+
+                    <!-- Grupo de botones -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <!-- Boton de cancelar -->
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
+
+                        <!-- Boton de envio del formulario -->
+                        <button type="submit" class="btn btn-info">Guardar Plato</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
