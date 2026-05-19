@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TransaccionesClient from '../components/transacciones/TransaccionesClient';
+---
+
+<BaseLayout title="Transacciones" username="Usuario" rol="cliente">
+  <TransaccionesClient client:load />
+</BaseLayout>

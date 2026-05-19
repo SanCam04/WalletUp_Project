@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import UsuariosClient from '../../components/admin/UsuariosClient';
+---
+
+<BaseLayout title="Gestión de Usuarios" username="SuperAdmin" rol="superadmin">
+  <UsuariosClient client:load />
+</BaseLayout>

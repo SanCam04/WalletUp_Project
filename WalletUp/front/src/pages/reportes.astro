@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ReportesClient from '../components/reportes/ReportesClient';
+---
+
+<BaseLayout title="Reportes" username="Usuario" rol="cliente">
+  <ReportesClient client:load />
+</BaseLayout>

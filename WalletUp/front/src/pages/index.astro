@@ -1,0 +1,212 @@
+---
+// Página de login
+import AuthLayout from '../layouts/AuthLayout.astro';
+---
+
+<AuthLayout title="Login">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>💳 WalletUp</h1>
+      <p>Gestión Financiera Personal</p>
+    </div>
+
+    <form method="POST" action="http://localhost:5000/login" class="login-form">
+      <div class="form-group">
+        <label for="username">Usuario</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Ingresa tu usuario"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Ingresa tu contraseña"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <div class="captcha-section">
+          <p id="captcha-text">¿Cuánto es <span id="num1">0</span> + <span id="num2">0</span>?</p>
+          <input
+            type="number"
+            id="captcha_respuesta"
+            name="captcha_respuesta"
+            placeholder="Respuesta"
+            required
+          />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">
+        Iniciar Sesión
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p class="text-muted">Credenciales de prueba:</p>
+      <code class="demo-creds">superadmin / Admin#2026</code>
+    </div>
+  </div>
+</AuthLayout>
+
+<style>
+  .login-card {
+    background-color: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.5s ease;
+  }
+
+  .login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .login-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #667eea;
+  }
+
+  .login-header p {
+    color: var(--text-light);
+    margin: 0;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+
+  .form-group input {
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: var(--transition);
+  }
+
+  .form-group input:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  .captcha-section {
+    background-color: var(--light-bg);
+    padding: 1rem;
+    border-radius: var(--radius);
+  }
+
+  .captcha-section p {
+    margin: 0 0 0.75rem 0;
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+
+  #captcha_respuesta {
+    width: 100%;
+  }
+
+  .btn-block {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #667eea;
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+  }
+
+  .btn-block:hover {
+    background-color: #764ba2;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  }
+
+  .login-footer {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+  }
+
+  .login-footer p {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .demo-creds {
+    display: inline-block;
+    background-color: var(--light-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #667eea;
+    margin-top: 0.5rem;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .login-card {
+      padding: 1.5rem;
+    }
+
+    .login-header h1 {
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<script>
+  // Script para generar números CAPTCHA
+  function generateCaptcha() {
+    const num1 = Math.floor(Math.random() * 9) + 1;
+    const num2 = Math.floor(Math.random() * 9) + 1;
+
+    document.getElementById('num1')!.textContent = String(num1);
+    document.getElementById('num2')!.textContent = String(num2);
+
+    return num1 + num2;
+  }
+
+  // Inicializar CAPTCHA al cargar la página
+  window.addEventListener('load', () => {
+    generateCaptcha();
+  });
+</script>

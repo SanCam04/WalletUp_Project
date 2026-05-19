@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MetasClient from '../components/metas/MetasClient';
+---
+
+<BaseLayout title="Metas de Ahorro" username="Usuario" rol="cliente">
+  <MetasClient client:load />
+</BaseLayout>
