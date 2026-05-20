@@ -3,7 +3,7 @@
     <nav class="flex-between navbar">
       <div class="navbar-brand">💰 WalletUp</div>
 
-      <button class="hamburger" id="hamburgerBtn" style="display: none; border: none; background: none; font-size: 1.5rem; cursor: pointer;">☰</button>
+      <button class="hamburger" id="hamburgerBtn">☰</button>
 
       <div class="flex gap-3 nav-menu" id="navLinks">
         <a href="/dashboard" class="nav-link">Dashboard</a>
@@ -60,19 +60,6 @@
     }
   });
 
-  // Responsive - mostrar/ocultar hamburguesa según pantalla
-  function handleResize() {
-    if (window.innerWidth > 768) {
-      navMenu.classList.remove('active');
-      hamburgerBtn.style.display = 'none';
-      navMenu.style.display = 'flex';
-    } else {
-      hamburgerBtn.style.display = 'block';
-    }
-  }
-
-  window.addEventListener('resize', handleResize);
-  handleResize();
 
   document.getElementById('logoutBtn').addEventListener('click', async () => {
     try {
