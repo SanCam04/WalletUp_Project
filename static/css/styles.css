@@ -244,6 +244,55 @@ header {
 
 .dropdown-item:hover {
   background-color: var(--light-color);
+}
+
+.hamburger {
+  display: none;
+  color: white;
+}
+
+.nav-menu {
+  transition: var(--transition);
+}
+
+.nav-menu.active {
+  display: flex !important;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  padding: 1rem;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.nav-menu.active .nav-link {
+  margin-left: 0;
+  padding: 0.5rem 0;
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+
+  .dropdown-menu {
+    position: fixed !important;
+    right: 1rem !important;
+    top: auto !important;
+  }
+}
   color: var(--primary-color);
 }
 

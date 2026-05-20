@@ -1,9 +1,11 @@
 <header>
   <div class="container">
-    <nav class="flex-between">
+    <nav class="flex-between navbar">
       <div class="navbar-brand">💰 WalletUp</div>
 
-      <div class="flex gap-3" id="navLinks">
+      <button class="hamburger" id="hamburgerBtn" style="display: none; border: none; background: none; font-size: 1.5rem; cursor: pointer;">☰</button>
+
+      <div class="flex gap-3 nav-menu" id="navLinks">
         <a href="/dashboard" class="nav-link">Dashboard</a>
         <a href="/transacciones" class="nav-link">Transacciones</a>
         <a href="/categorias" class="nav-link">Categorías</a>
@@ -30,9 +32,24 @@
 </header>
 
 <script>
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navMenu = document.getElementById('navLinks');
   const userDropdown = document.getElementById('userDropdown');
   const dropdownMenu = document.getElementById('dropdownMenu');
 
+  // Menú hamburguesa
+  hamburgerBtn.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+  });
+
+  // Cerrar menú al hacer clic en un enlace
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      navMenu.classList.remove('active');
+    });
+  });
+
+  // Dropdown de usuario
   userDropdown.addEventListener('click', () => {
     dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
   });
@@ -42,6 +59,20 @@
       dropdownMenu.style.display = 'none';
     }
   });
+
+  // Responsive - mostrar/ocultar hamburguesa según pantalla
+  function handleResize() {
+    if (window.innerWidth > 768) {
+      navMenu.classList.remove('active');
+      hamburgerBtn.style.display = 'none';
+      navMenu.style.display = 'flex';
+    } else {
+      hamburgerBtn.style.display = 'block';
+    }
+  }
+
+  window.addEventListener('resize', handleResize);
+  handleResize();
 
   document.getElementById('logoutBtn').addEventListener('click', async () => {
     try {
