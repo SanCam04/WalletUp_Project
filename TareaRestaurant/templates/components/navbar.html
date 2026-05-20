@@ -1,34 +1,90 @@
 <!-- BLOQUE NAVEGACION PRINCIPAL -->
 <!-- Navegacion principal de la aplicacion -->
-<nav class="navbar navbar-light d-flex justify-content-center" style="background-color: #FFD580;">
-    <!-- Contenedor de la navegacion -->
+<nav class="navbar navbar-light d-flex justify-content-between align-items-center ps-4 pe-4" style="background-color: #FFD580;">
+    <!-- Contenedor izquierdo con logo y enlaces principales -->
     <div class="d-flex align-items-center gap-4">
-        <!-- Logo de McDonalds alineado a la izquierda -->
+        <!-- Logo de Corral -->
         <a class="navbar-brand mb-0" href="{{ url_for('index') }}">
-            <!-- Logo de Corral -->
             <img src="https://i.revistapym.com.co/old/2016/10/logo-corral-1.png" alt="Corral" width="80" height="80" class="d-inline-block align-text-top">
         </a>
 
-        <!-- Menu de navegacion -->
-        <!-- Lista de menu -->
+        <!-- Menu de navegacion principal -->
         <ul class="navbar-nav d-flex flex-row gap-3 mb-0">
             <!-- Item menu registrar cliente -->
             <li class="nav-item">
-                <!-- Link a registrar cliente -->
                 <a class="nav-link" href="{{ url_for('registrar_cliente') }}">Registrar Cliente</a>
             </li>
 
             <!-- Item menu registrar plato -->
             <li class="nav-item">
-                <!-- Link a registrar plato -->
                 <a class="nav-link" href="{{ url_for('registrar_plato') }}">Registrar Plato</a>
             </li>
 
             <!-- Item menu crear pedido -->
             <li class="nav-item">
-                <!-- Link a crear pedido -->
                 <a class="nav-link" href="{{ url_for('crear_pedido') }}">Crear Pedido</a>
             </li>
+
+            <!-- Item menu consultar pedidos -->
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('consultar_pedidos') }}">Consultar Pedidos</a>
+            </li>
+
+            <!-- Item menu proveedores - solo para admin -->
+            {% if session.get('rol') == 'admin' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('admin_proveedores') }}">Proveedores</a>
+                </li>
+            {% endif %}
+
+            <!-- Item menu inventario - solo para admin -->
+            {% if session.get('rol') == 'admin' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('admin_inventario') }}">Inventario</a>
+                </li>
+            {% endif %}
+
+            <!-- Item menu administracion - solo para admin -->
+            {% if session.get('rol') == 'admin' %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Administracion
+                    </a>
+                    <!-- Menu desplegable de admin -->
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <!-- Link a gestion de usuarios -->
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('admin_usuarios') }}">Gestionar Usuarios</a>
+                        </li>
+                        <!-- Link a auditoria -->
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('admin_logs') }}">Ver Auditoria</a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
         </ul>
+    </div>
+
+    <!-- Contenedor derecho con usuario y rol -->
+    <div class="d-flex align-items-center gap-3">
+        <!-- Badge con el rol del usuario -->
+        {% if session.get('rol') == 'admin' %}
+            <span class="badge bg-danger rol-badge">{{ session.get('rol') }}</span>
+        {% elif session.get('rol') == 'mesero' %}
+            <span class="badge bg-success rol-badge">{{ session.get('rol') }}</span>
+        {% elif session.get('rol') == 'cocinero' %}
+            <span class="badge bg-warning text-dark rol-badge">{{ session.get('rol') }}</span>
+        {% else %}
+            <span class="badge bg-secondary rol-badge">{{ session.get('rol') }}</span>
+        {% endif %}
+
+        <!-- Nombre del usuario logueado -->
+        <span class="navbar-text">{{ session.get('username', 'usuario') }}</span>
+
+        <!-- Link de logout -->
+        <a class="nav-link" href="{{ url_for('logout') }}">
+            <button class="btn btn-sm btn-outline-dark">Cerrar Sesion</button>
+        </a>
     </div>
 </nav>

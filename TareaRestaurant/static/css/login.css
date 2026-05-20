@@ -1,0 +1,288 @@
+/* Estilos personalizados para la pagina de login */
+
+/* HTML ocupa altura completa */
+html {
+    /* Altura minima del viewport */
+    height: 100%;
+}
+
+/* Estilo del cuerpo en la pagina de login */
+body {
+    /* Color de fondo degradado azul */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    /* Distribucion vertical con flexbox */
+    display: flex;
+
+    /* Direccion columna */
+    flex-direction: column;
+
+    /* Altura minima completa */
+    min-height: 100vh;
+
+    /* Alineacion vertical centrada */
+    justify-content: center;
+
+    /* Alineacion horizontal centrada */
+    align-items: center;
+
+    /* Margen cero */
+    margin: 0;
+
+    /* Padding cero */
+    padding: 0;
+
+    /* Familia de fuentes */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Estilo del contenedor de login */
+.login-container {
+    /* Ancho maximo del contenedor */
+    width: 100%;
+
+    /* Padding en pantallas pequenas */
+    padding: 1rem;
+}
+
+/* Estilo de la tarjeta de login */
+.card {
+    /* Ancho maximo */
+    max-width: 450px;
+
+    /* Margen automatico para centrar */
+    margin: 0 auto;
+
+    /* Borde redondeado */
+    border-radius: 12px;
+
+    /* Sin borde */
+    border: none;
+
+    /* Transicion suave */
+    transition: all 0.3s ease;
+}
+
+/* Efecto hover en la tarjeta */
+.card:hover {
+    /* Transformacion de escala */
+    transform: translateY(-10px);
+
+    /* Sombra aumentada */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Estilo del encabezado de la tarjeta */
+.card-header {
+    /* Borde redondeado superior */
+    border-radius: 12px 12px 0 0;
+
+    /* Sin borde */
+    border: none;
+
+    /* Padding aumentado */
+    padding: 2rem 1.5rem !important;
+}
+
+/* Estilo de h3 en el encabezado */
+.card-header h3 {
+    /* Color blanco */
+    color: #ffffff;
+
+    /* Fuente mas gruesa */
+    font-weight: 700;
+
+    /* Sin margen inferior */
+    margin-bottom: 0.5rem;
+}
+
+/* Estilo del parrafo en el encabezado */
+.card-header p {
+    /* Color blanco */
+    color: rgba(255, 255, 255, 0.9);
+
+    /* Sin margen */
+    margin: 0;
+
+    /* Tamanio de fuente reducido */
+    font-size: 0.9rem;
+}
+
+/* Estilo del cuerpo de la tarjeta */
+.card-body {
+    /* Padding aumentado */
+    padding: 2rem 1.5rem;
+}
+
+/* Estilo del pie de la tarjeta */
+.card-footer {
+    /* Borde redondeado inferior */
+    border-radius: 0 0 12px 12px;
+
+    /* Borde superior sutil */
+    border-top: 1px solid #e9ecef;
+
+    /* Padding uniforme */
+    padding: 1.5rem;
+
+    /* Color de fondo muy claro */
+    background-color: #f8f9fa;
+}
+
+/* Estilo de parrafos en el pie */
+.card-footer p {
+    /* Sin margen inferior */
+    margin-bottom: 0.5rem;
+
+    /* Tamanio de fuente reducido */
+    font-size: 0.85rem;
+
+    /* Color gris oscuro */
+    color: #6c757d;
+}
+
+/* Estilo de labels en formulario */
+label.form-label {
+    /* Fuente mas gruesa */
+    font-weight: 600;
+
+    /* Color oscuro */
+    color: #495057;
+
+    /* Margen inferior */
+    margin-bottom: 0.5rem;
+}
+
+/* Estilo de inputs en formulario */
+.form-control,
+.form-select {
+    /* Borde sutil gris */
+    border: 1px solid #dee2e6;
+
+    /* Padding vertical */
+    padding: 0.75rem;
+
+    /* Radio de borde */
+    border-radius: 6px;
+
+    /* Transicion suave */
+    transition: all 0.3s ease;
+
+    /* Color de fuente */
+    color: #495057;
+
+    /* Tamanio de fuente */
+    font-size: 1rem;
+}
+
+/* Estilo de input al hacer focus */
+.form-control:focus,
+.form-select:focus {
+    /* Color de borde azul */
+    border-color: #667eea;
+
+    /* Sombra azul al hacer focus */
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+
+    /* Sin sombra por defecto */
+    outline: none;
+}
+
+/* Estilo de placeholder en inputs */
+.form-control::placeholder {
+    /* Color gris claro */
+    color: #adb5bd;
+
+    /* Opacidad */
+    opacity: 1;
+}
+
+/* Estilo de boton de submit */
+button[type="submit"] {
+    /* Padding vertical */
+    padding: 0.75rem 1.5rem;
+
+    /* Fuente mas gruesa */
+    font-weight: 600;
+
+    /* Transicion suave */
+    transition: all 0.3s ease;
+
+    /* Tamanio de fuente */
+    font-size: 1rem;
+}
+
+/* Efecto hover en boton de submit */
+button[type="submit"]:hover {
+    /* Transformacion de escala */
+    transform: translateY(-2px);
+
+    /* Sombra en hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo de alerta de error */
+.alert-danger {
+    /* Borde redondeado */
+    border-radius: 6px;
+
+    /* Sin borde por defecto */
+    border: none;
+
+    /* Margen inferior */
+    margin-bottom: 1rem;
+}
+
+/* Feedback invalido en formularios */
+.invalid-feedback {
+    /* Display block */
+    display: block;
+
+    /* Color rojo */
+    color: #dc3545;
+
+    /* Tamanio de fuente reducido */
+    font-size: 0.875rem;
+
+    /* Margen superior */
+    margin-top: 0.25rem;
+}
+
+/* Estilos responsivos para pantallas pequenas */
+@media (max-width: 576px) {
+    /* Card en pantallas pequenas */
+    .card {
+        /* Sin sombra */
+        box-shadow: none !important;
+
+        /* Margen */
+        margin: 1rem 0;
+    }
+
+    /* Card body en pantallas pequenas */
+    .card-body {
+        /* Padding reducido */
+        padding: 1.5rem 1rem;
+    }
+
+    /* Card header en pantallas pequenas */
+    .card-header {
+        /* Padding reducido */
+        padding: 1.5rem 1rem !important;
+    }
+
+    /* Card footer en pantallas pequenas */
+    .card-footer {
+        /* Padding reducido */
+        padding: 1rem;
+    }
+
+    /* Boton en pantallas pequenas */
+    button[type="submit"] {
+        /* Padding reducido */
+        padding: 0.6rem 1rem;
+
+        /* Tamanio de fuente reducido */
+        font-size: 0.95rem;
+    }
+}

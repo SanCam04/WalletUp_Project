@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block titulo %}Auditoria del Sistema - Gestion Restaurante{% endblock %}
+
+{% block contenido %}
+<!-- Seccion de auditoria -->
+<div class="row">
+    <!-- Columna completa -->
+    <div class="col-12">
+        <!-- Card de logs -->
+        <div class="card">
+            <!-- Encabezado de la card -->
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Registro de Auditoria del Sistema</h5>
+            </div>
+
+            <!-- Contenido de la card -->
+            <div class="card-body">
+                <!-- Tabla de logs -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm">
+                        <!-- Encabezados de la tabla -->
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha y Hora</th>
+                                <th>Usuario</th>
+                                <th>Accion</th>
+                            </tr>
+                        </thead>
+
+                        <!-- Cuerpo de la tabla -->
+                        <tbody>
+                            <!-- Iterar sobre cada log -->
+                            {% for log in logs %}
+                                <tr>
+                                    <!-- ID del log -->
+                                    <td>{{ log.id }}</td>
+
+                                    <!-- Fecha y hora del log -->
+                                    <td>
+                                        <small class="text-muted">{{ log.fecha }}</small>
+                                    </td>
+
+                                    <!-- Usuario que realizo la accion -->
+                                    <td>
+                                        <span class="badge bg-info">{{ log.usuario }}</span>
+                                    </td>
+
+                                    <!-- Accion realizada -->
+                                    <td>{{ log.accion }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <!-- Si no hay logs -->
+                    {% if not logs %}
+                        <div class="alert alert-info mb-0">
+                            No hay registros de auditoria
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Informacion sobre los logs -->
+                <div class="alert alert-info mt-3 mb-0">
+                    <strong>Informacion:</strong> Se muestran los ultimos 500 registros de auditoria. Cada accion realizada en el sistema es registrada para fines de seguridad y trazabilidad.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

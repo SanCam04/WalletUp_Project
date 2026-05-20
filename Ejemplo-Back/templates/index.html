@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Backend con Flask</title>
+</head>
+
+<body>
+    <h2>Registro de Usuarios</h2>
+    <form method="POST" action="/guardar">
+        <input type="text" name="nombre" placeholder="Nombre" required><br><br>
+        <input type="email" name="email" placeholder="Email" required><br><br>
+        <button type="submit">Guardar</button>
+    </form>
+    <hr>
+    <h3>Lista de Usuarios</h3>
+    <ul>
+        {% for u in usuarios %}
+        <li>{{ u.nombre }} - {{ u.email }}</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>

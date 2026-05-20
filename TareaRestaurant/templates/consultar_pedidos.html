@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block titulo %}Consultar Pedidos - Gestion Restaurante{% endblock %}
+
+{% block contenido %}
+<!-- Seccion de consulta de pedidos -->
+<div class="row">
+    <!-- Card principal -->
+    <div class="col-12">
+        <!-- Card con encabezado azul -->
+        <div class="card">
+            <!-- Encabezado de la card -->
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Consultar Pedidos con Detalles</h5>
+            </div>
+
+            <!-- Contenido de la card -->
+            <div class="card-body">
+                <!-- Mostrar mensajes flash -->
+                {% with messages = get_flashed_messages(category_filter=['success']) %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <!-- Alerta de exito -->
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Boton para consultar pedidos -->
+                <button type="button" class="btn btn-primary mb-3" id="btn_consultar">
+                    Cargar Pedidos
+                </button>
+
+                <!-- Div donde se muestran los resultados -->
+                <div id="resultados_pedidos"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Enlace a script personalizado para consultar pedidos -->
+<script src="{{ url_for('static', filename='js/consultar_pedidos.js') }}"></script>
+{% endblock %}

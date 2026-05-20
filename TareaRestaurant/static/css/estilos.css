@@ -277,3 +277,30 @@ footer {
         gap: 0.5rem !important;
     }
 }
+
+/* Estilo de badge para rol en la navegacion */
+.rol-badge {
+    /* Tamanio de fuente mas grande */
+    font-size: 0.85rem;
+
+    /* Padding adicional */
+    padding-top: 0.5rem !important;
+
+    /* Padding inferior adicional */
+    padding-bottom: 0.5rem !important;
+
+    /* Letra mayuscula para los roles */
+    text-transform: uppercase;
+
+    /* Transicion suave */
+    transition: all 0.3s ease;
+}
+
+/* Efecto hover en badge de rol */
+.rol-badge:hover {
+    /* Sombra en hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    /* Escala aumentada */
+    transform: scale(1.05);
+}

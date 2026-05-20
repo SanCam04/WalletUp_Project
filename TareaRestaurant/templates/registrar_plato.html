@@ -1,76 +1,167 @@
 {% extends "base.html" %}
 
-{% block titulo %}Registrar Plato{% endblock %}
+{% block titulo %}Registrar Plato - Gestion Restaurante{% endblock %}
 
 {% block contenido %}
-
 <!-- Seccion de titulo principal -->
 <div class="mb-5">
-    <!-- Titulo de la pagina -->
     <h1 class="text-primary display-4">Registrar Plato</h1>
-
-    <!-- Subtitulo descriptivo -->
-    <p class="lead">Agrega un nuevo plato al menu</p>
+    <p class="lead">Agrega un nuevo plato al menu con sus ingredientes</p>
 </div>
 
-<!-- Grid de una columna para el formulario -->
+<!-- Grid de dos columnas: formulario y inventario -->
 <div class="row">
-    <!-- Columna del formulario -->
-    <div class="col-lg-6 mx-auto">
-        <!-- Tarjeta del formulario -->
+    <!-- Columna izquierda: formulario del plato -->
+    <div class="col-lg-5 mb-4">
+        <!-- Card del formulario -->
         <div class="card shadow-sm">
-            <!-- Encabezado de la tarjeta -->
+            <!-- Encabezado -->
             <div class="card-header bg-info text-white">
-                <!-- Titulo del formulario -->
-                <h5 class="mb-0">Nuevo Plato</h5>
+                <h5 class="mb-0">Datos del Plato</h5>
             </div>
 
-            <!-- Cuerpo de la tarjeta -->
+            <!-- Cuerpo -->
             <div class="card-body">
-                <!-- Formulario para registrar plato -->
-                <form action="{{ url_for('guardar_plato') }}" method="POST" class="needs-validation">
-                    <!-- Grupo del campo nombre plato -->
+                <!-- Formulario -->
+                <form id="formPlato" action="{{ url_for('guardar_plato') }}" method="POST" class="needs-validation" novalidate>
+                    <!-- Campo nombre -->
                     <div class="mb-3">
-                        <!-- Etiqueta del campo -->
-                        <label for="nombre_plato" class="form-label">Nombre del Plato</label>
-
-                        <!-- Input de texto para nombre plato -->
-                        <input type="text" class="form-control" id="nombre_plato" name="nombre" placeholder="Ej: Hamburguesa Clasica" required>
-
-                        <!-- Feedback de validacion -->
+                        <label for="nombre" class="form-label">Nombre del Plato</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ej: Hamburguesa Clasica" required>
                         <div class="invalid-feedback">
-                            <!-- Mensaje de error -->
                             Por favor ingresa el nombre del plato
                         </div>
                     </div>
 
-                    <!-- Grupo del campo precio plato -->
+                    <!-- Campo precio -->
                     <div class="mb-3">
-                        <!-- Etiqueta del campo -->
-                        <label for="precio_plato" class="form-label">Precio</label>
-
-                        <!-- Input de numero para precio -->
-                        <input type="number" class="form-control" id="precio_plato" name="precio" step="0.01" placeholder="Ej: 15000" required>
-
-                        <!-- Feedback de validacion -->
+                        <label for="precio" class="form-label">Precio</label>
+                        <input type="number" class="form-control" id="precio" name="precio" step="0.01" placeholder="Ej: 15000" required>
                         <div class="invalid-feedback">
-                            <!-- Mensaje de error -->
                             Por favor ingresa un precio valido
                         </div>
                     </div>
 
-                    <!-- Grupo de botones -->
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <!-- Boton de cancelar -->
-                        <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
+                    <!-- Campo oculto para ingredientes JSON -->
+                    <input type="hidden" name="ingredientes" id="ingredientes_json" value="[]">
 
-                        <!-- Boton de envio del formulario -->
+                    <!-- Seccion de ingredientes seleccionados -->
+                    <div class="mb-4">
+                        <label class="form-label"><strong>Ingredientes Seleccionados</strong></label>
+                        <div id="tabla-ingredientes-container">
+                            <div class="alert alert-info small mb-3">
+                                Selecciona ingredientes desde la tabla de inventario a la derecha
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-info">Guardar Plato</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- Columna derecha: inventario disponible -->
+    <div class="col-lg-7 mb-4">
+        <!-- Card de inventario -->
+        <div class="card shadow-sm">
+            <!-- Encabezado -->
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Productos en Inventario</h5>
+            </div>
+
+            <!-- Cuerpo -->
+            <div class="card-body">
+                <!-- Si hay inventario disponible -->
+                {% if inventario %}
+                    <!-- Tabla de inventario -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm">
+                            <!-- Encabezados -->
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Stock</th>
+                                    <th>Unidad</th>
+                                    <th>Precio Unit.</th>
+                                    <th>Accion</th>
+                                </tr>
+                            </thead>
+
+                            <!-- Body -->
+                            <tbody>
+                                {% for item in inventario %}
+                                    <tr>
+                                        <td>{{ item.nombre_producto }}</td>
+                                        <td>{{ "%.2f"|format(item.cantidad) }}</td>
+                                        <td>{{ item.unidad }}</td>
+                                        <td>${{ "%.2f"|format(item.precio_unitario) }}</td>
+                                        <td>
+                                            <!-- Boton para agregar ingrediente -->
+                                            <button type="button" class="btn btn-sm btn-primary btn-agregar-ingrediente"
+                                                    data-item-id="{{ item.id }}"
+                                                    data-item-nombre="{{ item.nombre_producto }}"
+                                                    data-item-cantidad="{{ item.cantidad }}"
+                                                    data-item-unidad="{{ item.unidad }}"
+                                                    title="Agregar a ingredientes">
+                                                +
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <!-- Si no hay inventario -->
+                    <div class="alert alert-warning">
+                        <strong>No hay productos en inventario.</strong><br>
+                        Ve a <a href="{{ url_for('admin_inventario') }}">Inventario</a> para agregar productos de los proveedores.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- Modal unico para agregar cantidad -->
+<div class="modal fade" id="modalAgregarIngrediente" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!-- Encabezado -->
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalTitulo">Agregar Ingrediente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Cuerpo -->
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Cantidad Requerida</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="modalCantidad" step="0.01" min="0" placeholder="0.00" required>
+                        <span class="input-group-text" id="modalUnidad">unidad</span>
+                    </div>
+                    <small class="text-muted">Max disponible: <span id="modalMaximo">0</span> <span id="modalUnidadMax">unidad</span></small>
+                </div>
+            </div>
+
+            <!-- Pie -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmarAgregar">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Script para manejo de ingredientes -->
+<script src="{{ url_for('static', filename='js/registrar_plato.js') }}"></script>
 {% endblock %}
