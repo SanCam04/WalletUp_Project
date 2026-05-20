@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metas - WalletUp</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  {% include 'componentes/header.html' %}
+
+  <div class="page-container">
+    <div class="container">
+      <h1>Mis Metas de Ahorro</h1>
+      <p class="text-muted">Define y sigue tus objetivos financieros</p>
+
+      <div id="alertContainer"></div>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <button class="btn btn-primary" onclick="mostrarModalMeta()">🎯 Crear Nueva Meta</button>
+        </div>
+      </div>
+
+      <div id="metasContainer" class="row">
+        <p class="text-center text-muted">Cargando metas...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para crear meta -->
+  <div id="modalMeta" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Nueva Meta</h3>
+        <button class="modal-close" onclick="cerrarModal('modalMeta')">×</button>
+      </div>
+      <form id="formMeta" onsubmit="guardarMeta(event)">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" class="form-control" placeholder="Ej: Vacaciones" required>
+        </div>
+        <div class="form-group">
+          <label for="monto_objetivo">Monto Objetivo</label>
+          <input type="number" id="monto_objetivo" class="form-control" placeholder="0.00" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label for="fecha_objetivo">Fecha Objetivo</label>
+          <input type="date" id="fecha_objetivo" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" class="form-control" placeholder="Descripción (opcional)" rows="3"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalMeta')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Crear Meta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para añadir dinero a meta -->
+  <div id="modalAnadir" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Añadir Dinero a <span id="metaNombreActual"></span></h3>
+        <button class="modal-close" onclick="cerrarModal('modalAnadir')">×</button>
+      </div>
+      <form id="formAnadir" onsubmit="anadirDinero(event)">
+        <input type="hidden" id="metaIdActual">
+
+        <div class="form-group">
+          <label for="montoAnadir">Cantidad a Añadir</label>
+          <input type="number" id="montoAnadir" class="form-control" placeholder="0.00" step="0.01" required>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalAnadir')">Cancelar</button>
+          <button type="submit" class="btn btn-success">Añadir Dinero</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para quitar dinero de meta -->
+  <div id="modalQuitar" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Quitar Dinero de <span id="metaNombreActualQuitar"></span></h3>
+        <button class="modal-close" onclick="cerrarModal('modalQuitar')">×</button>
+      </div>
+      <form id="formQuitar" onsubmit="quitarDinero(event)">
+        <input type="hidden" id="metaIdActualQuitar">
+
+        <div class="form-group">
+          <label for="montoQuitar">Cantidad a Quitar</label>
+          <input type="number" id="montoQuitar" class="form-control" placeholder="0.00" step="0.01" required>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalQuitar')">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Quitar Dinero</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% include 'componentes/footer.html' %}
+
+  <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/metas.js') }}"></script>
+</body>
+</html>
