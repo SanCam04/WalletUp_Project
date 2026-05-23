@@ -3,22 +3,14 @@
     <nav class="flex-between navbar">
       <div class="navbar-brand">💰 WalletUp</div>
 
-      <button class="hamburger" id="hamburgerBtn">☰</button>
-
-      <div class="flex gap-3 nav-menu" id="navLinks">
-        <a href="/dashboard" class="nav-link">Dashboard</a>
-        <a href="/transacciones" class="nav-link">Transacciones</a>
-        <a href="/categorias" class="nav-link">Categorías</a>
-        <a href="/metas" class="nav-link">Metas</a>
-        <a href="/reportes" class="nav-link">Reportes</a>
-        <a href="/educacion" class="nav-link">Educación</a>
-        <a href="/admin/usuarios" class="nav-link" id="adminLink" style="display: none;">👥 Usuarios</a>
+      <div class="navbar-right">
+        <button class="hamburger" id="hamburgerBtn">☰</button>
 
         <div class="dropdown">
           <button class="nav-link" id="userDropdown" style="border: none; background: none; cursor: pointer;">
             <span id="usuarioNombre">Usuario</span> ▼
           </button>
-          <div class="dropdown-menu" id="dropdownMenu" style="display: none; position: absolute; right: 0; top: 100%; background: white; min-width: 150px;">
+          <div class="dropdown-menu" id="dropdownMenu" style="display: none; position: absolute; right: 0; top: 100%; background: white; min-width: 150px; z-index: 100;">
             <a href="/perfil" class="dropdown-item">Mi Perfil</a>
             <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #e2e8f0;">
             <button id="logoutBtn" class="dropdown-item" style="width: 100%; text-align: left; border: none; background: none; cursor: pointer;">
@@ -26,6 +18,17 @@
             </button>
           </div>
         </div>
+      </div>
+
+      <div class="flex gap-3 nav-menu" id="navLinks">
+        <a href="/dashboard" class="nav-link">Dashboard</a>
+        <a href="/transacciones" class="nav-link">Transacciones</a>
+        <a href="/categorias" class="nav-link">Categorías</a>
+        <a href="/metas" class="nav-link">Metas</a>
+        <a href="/deudas" class="nav-link">Deudas</a>
+        <a href="/reportes" class="nav-link">Reportes</a>
+        <a href="/educacion" class="nav-link">Educación</a>
+        <a href="/admin/usuarios" class="nav-link" id="adminLink" style="display: none;">👥 Usuarios</a>
       </div>
     </nav>
   </div>
@@ -61,15 +64,21 @@
   });
 
 
-  document.getElementById('logoutBtn').addEventListener('click', async () => {
-    try {
-      const response = await fetch('/api/logout', { method: 'POST' });
-      localStorage.removeItem('user');
-      window.location.href = '/login';
-    } catch (error) {
-      console.error('Error:', error);
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+  document.addEventListener('DOMContentLoaded', () => {
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          const response = await fetch('/api/logout', { method: 'POST' });
+          localStorage.removeItem('user');
+          sessionStorage.clear();
+          window.location.href = '/login';
+        } catch (error) {
+          console.error('Error:', error);
+          window.location.href = '/login';
+        }
+      });
     }
   });
 

@@ -68,6 +68,90 @@ def get_user_rol(user_id):
         return resultado[0]
     return None
 
+def calcular_porcentaje_gasto(user_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    year = datetime.now().year
+    month = datetime.now().month
+
+    cursor.execute("""
+    SELECT
+        COALESCE(SUM(CASE WHEN tipo='ingreso' THEN monto ELSE 0 END), 0) as total_ingresos,
+        COALESCE(SUM(CASE WHEN tipo='gasto' THEN monto ELSE 0 END), 0) as total_gastos
+    FROM transacciones
+    WHERE usuario_id = ? AND strftime('%Y-%m', fecha) = ?
+    """, (user_id, f"{year:04d}-{month:02d}"))
+
+    resultado = cursor.fetchone()
+    conn.close()
+
+    if resultado:
+        total_ingresos = resultado['total_ingresos'] or 0
+        total_gastos = resultado['total_gastos'] or 0
+
+        if total_ingresos <= 0:
+            return 0
+
+        return (total_gastos / total_ingresos) * 100
+
+    return 0
+
+def recalcular_monto_meta(meta_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT COALESCE(SUM(CASE WHEN t.tipo='gasto' THEN t.monto ELSE -t.monto END), 0) as total
+    FROM transacciones t
+    JOIN categorias c ON t.categoria_id = c.id
+    WHERE c.meta_id = ?
+    """, (meta_id,))
+
+    resultado = cursor.fetchone()
+    total = float(resultado['total']) if resultado else 0
+
+    cursor.execute("UPDATE metas SET monto_actual = ? WHERE id = ?", (total, meta_id))
+    conn.commit()
+    conn.close()
+
+def verificar_y_crear_alerta_gasto(user_id):
+    porcentaje = calcular_porcentaje_gasto(user_id)
+
+    if porcentaje >= 80:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        year = datetime.now().year
+        month = datetime.now().month
+        mes_actual = f"{year:04d}-{month:02d}"
+
+        cursor.execute("""
+        SELECT id FROM alertas
+        WHERE usuario_id = ? AND tipo = 'gasto_80' AND strftime('%Y-%m', fecha_creacion) = ?
+        """, (user_id, mes_actual))
+
+        alerta_existente = cursor.fetchone()
+
+        if not alerta_existente:
+            fecha_creacion = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            porcentaje_formateado = f"{porcentaje:.1f}"
+
+            cursor.execute("""
+            INSERT INTO alertas(usuario_id, titulo, descripcion, tipo, fecha_creacion)
+            VALUES(?, ?, ?, ?, ?)
+            """, (
+                user_id,
+                "⚠️ Alerta: Gasto al 80%",
+                f"Has gastado el {porcentaje_formateado}% de tus ingresos este mes. ¡Cuidado con tus gastos!",
+                "gasto_80",
+                fecha_creacion
+            ))
+
+            conn.commit()
+
+        conn.close()
+
 # =====================================================
 # decoradores para proteger rutas
 # =====================================================
@@ -179,8 +263,12 @@ def init_db():
             nombre TEXT NOT NULL,
             tipo TEXT NOT NULL,
             color TEXT,
+            deuda_id INTEGER,
+            meta_id INTEGER,
             fecha_creacion TEXT NOT NULL,
             FOREIGN KEY(usuario_id) REFERENCES usuarios(id),
+            FOREIGN KEY(deuda_id) REFERENCES deudas(id) ON DELETE SET NULL,
+            FOREIGN KEY(meta_id) REFERENCES metas(id) ON DELETE SET NULL,
             UNIQUE(usuario_id, nombre)
         )
     ''')
@@ -242,6 +330,24 @@ def init_db():
         )
     ''')
 
+    # tabla de deudas
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS deudas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL,
+            nombre TEXT NOT NULL,
+            monto_total REAL NOT NULL,
+            monto_pagado REAL DEFAULT 0,
+            acreedor TEXT NOT NULL,
+            fecha_vencimiento TEXT,
+            tasa_interes REAL DEFAULT 0,
+            estado TEXT DEFAULT 'activa',
+            descripcion TEXT,
+            fecha_creacion TEXT NOT NULL,
+            FOREIGN KEY(usuario_id) REFERENCES usuarios(id)
+        )
+    ''')
+
     conn.commit()
     conn.close()
 
@@ -259,6 +365,7 @@ def inicializar_roles():
         "crear_transaccion", "editar_transaccion", "eliminar_transaccion",
         "crear_categoria", "editar_categoria", "eliminar_categoria",
         "crear_meta", "editar_meta", "eliminar_meta",
+        "crear_deuda", "editar_deuda", "eliminar_deuda",
         "ver_reportes", "ver_educacion",
         "ver_logs", "crear_usuario", "ver_usuarios", "gestionar_usuarios"
     ]
@@ -281,10 +388,12 @@ def inicializar_roles():
         "cliente": ["crear_transaccion", "editar_transaccion", "eliminar_transaccion",
                    "crear_categoria", "editar_categoria", "eliminar_categoria",
                    "crear_meta", "editar_meta", "eliminar_meta",
+                   "crear_deuda", "editar_deuda", "eliminar_deuda",
                    "ver_reportes", "ver_educacion"],
         "superadmin": ["crear_transaccion", "editar_transaccion", "eliminar_transaccion",
                       "crear_categoria", "editar_categoria", "eliminar_categoria",
                       "crear_meta", "editar_meta", "eliminar_meta",
+                      "crear_deuda", "editar_deuda", "eliminar_deuda",
                       "ver_reportes", "ver_educacion",
                       "ver_logs", "crear_usuario", "ver_usuarios", "gestionar_usuarios"]
     }
@@ -513,6 +622,9 @@ def crear_transaccion():
     conn.close()
 
     registrar_log(session['username'], f"creo transaccion {tipo} de ${monto}")
+
+    if tipo == 'gasto':
+        verificar_y_crear_alerta_gasto(session['user_id'])
 
     return jsonify({
         "id": transaccion_id,
@@ -753,9 +865,30 @@ def obtener_metas():
     """, (session['user_id'],))
 
     metas = cursor.fetchall()
-    conn.close()
+    resultado = []
 
-    resultado = [dict(m) for m in metas]
+    for meta in metas:
+        meta_dict = dict(meta)
+
+        cursor.execute("""
+        SELECT COALESCE(SUM(CASE
+            WHEN t.tipo = 'gasto' THEN t.monto
+            WHEN t.tipo = 'ingreso' THEN -t.monto
+            ELSE 0
+        END), 0) as monto_ahorrado
+        FROM transacciones t
+        JOIN categorias c ON t.categoria_id = c.id
+        WHERE c.meta_id = ?
+        """, (meta['id'],))
+
+        resultado_monto = cursor.fetchone()
+        if resultado_monto:
+            meta_dict['monto_actual'] = resultado_monto[0]
+        else:
+            meta_dict['monto_actual'] = 0
+        resultado.append(meta_dict)
+
+    conn.close()
     registrar_log(session['username'], "consulto metas")
 
     return jsonify(resultado), 200
@@ -780,18 +913,30 @@ def crear_meta():
     except ValueError:
         return jsonify({"error": "monto_objetivo invalido"}), 400
 
-    conn = get_connection()
-    cursor = conn.cursor()
-    fecha_inicio = datetime.now().strftime("%Y-%m-%d")
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        fecha_inicio = datetime.now().strftime("%Y-%m-%d")
+        fecha_creacion = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    cursor.execute("""
-    INSERT INTO metas(usuario_id, nombre, monto_objetivo, fecha_inicio, fecha_objetivo, descripcion)
-    VALUES(?, ?, ?, ?, ?, ?)
-    """, (session['user_id'], nombre, monto_objetivo, fecha_inicio, fecha_objetivo, descripcion))
+        cursor.execute("""
+        INSERT INTO metas(usuario_id, nombre, monto_objetivo, fecha_inicio, fecha_objetivo, descripcion)
+        VALUES(?, ?, ?, ?, ?, ?)
+        """, (session['user_id'], nombre, monto_objetivo, fecha_inicio, fecha_objetivo, descripcion))
 
-    conn.commit()
-    meta_id = cursor.lastrowid
-    conn.close()
+        conn.commit()
+        meta_id = cursor.lastrowid
+
+        cursor.execute("""
+        INSERT OR IGNORE INTO categorias(usuario_id, nombre, tipo, meta_id, fecha_creacion)
+        VALUES(?, ?, ?, ?, ?)
+        """, (session['user_id'], nombre, 'gasto', meta_id, fecha_creacion))
+
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        conn.close()
+        return jsonify({"error": str(e)}), 400
 
     registrar_log(session['username'], f"creo meta '{nombre}' por ${monto_objetivo}")
 
@@ -880,6 +1025,7 @@ def eliminar_meta(id):
         conn.close()
         return jsonify({"error": "meta no existe"}), 404
 
+    cursor.execute("DELETE FROM categorias WHERE meta_id=?", (id,))
     cursor.execute("DELETE FROM metas WHERE id=? AND usuario_id=?",
                   (id, session['user_id']))
 
@@ -889,6 +1035,329 @@ def eliminar_meta(id):
     registrar_log(session['username'], f"elimino meta {id}")
 
     return jsonify({"mensaje": "meta eliminada correctamente"}), 200
+
+@app.route('/api/metas/<int:id>/agregar', methods=['POST'])
+@api_login_required
+@privilegio_required('editar_meta')
+def agregar_a_meta(id):
+    data = request.get_json()
+    monto = data.get('monto')
+
+    if not monto:
+        return jsonify({"error": "monto es requerido"}), 400
+
+    try:
+        monto = float(monto)
+        if monto <= 0:
+            return jsonify({"error": "monto debe ser mayor a 0"}), 400
+    except ValueError:
+        return jsonify({"error": "monto invalido"}), 400
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM metas WHERE id=? AND usuario_id=?",
+                  (id, session['user_id']))
+    meta = cursor.fetchone()
+
+    if not meta:
+        conn.close()
+        return jsonify({"error": "meta no existe"}), 404
+
+    cursor.execute("SELECT id FROM categorias WHERE meta_id=?", (id,))
+    categoria = cursor.fetchone()
+
+    if not categoria:
+        conn.close()
+        return jsonify({"error": "categoria de meta no existe"}), 404
+
+    fecha = datetime.now().strftime("%Y-%m-%d")
+    fecha_creacion = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    try:
+        cursor.execute("""
+        INSERT INTO transacciones(usuario_id, categoria_id, monto, tipo, descripcion, fecha, fecha_creacion)
+        VALUES(?, ?, ?, ?, ?, ?, ?)
+        """, (session['user_id'], categoria['id'], monto, 'gasto', f"Ahorro para {meta['nombre']}", fecha, fecha_creacion))
+
+        conn.commit()
+        conn.close()
+
+        registrar_log(session['username'], f"agrego ${monto} a meta {meta['nombre']}")
+
+        recalcular_monto_meta(id)
+        verificar_y_crear_alerta_gasto(session['user_id'])
+
+        return jsonify({"mensaje": "dinero agregado a meta"}), 201
+    except Exception as e:
+        conn.close()
+        return jsonify({"error": str(e)}), 400
+
+@app.route('/api/metas/<int:id>/sacar', methods=['POST'])
+@api_login_required
+@privilegio_required('editar_meta')
+def sacar_de_meta(id):
+    data = request.get_json()
+    monto = data.get('monto')
+
+    if not monto:
+        return jsonify({"error": "monto es requerido"}), 400
+
+    try:
+        monto = float(monto)
+        if monto <= 0:
+            return jsonify({"error": "monto debe ser mayor a 0"}), 400
+    except ValueError:
+        return jsonify({"error": "monto invalido"}), 400
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM metas WHERE id=? AND usuario_id=?",
+                  (id, session['user_id']))
+    meta = cursor.fetchone()
+
+    if not meta:
+        conn.close()
+        return jsonify({"error": "meta no existe"}), 404
+
+    cursor.execute("SELECT id FROM categorias WHERE meta_id=?", (id,))
+    categoria = cursor.fetchone()
+
+    if not categoria:
+        conn.close()
+        return jsonify({"error": "categoria de meta no existe"}), 404
+
+    monto_disponible = float(meta['monto_actual'] or 0)
+
+    if monto_disponible < monto:
+        conn.close()
+        return jsonify({"error": f"no hay suficiente dinero en la meta. Disponible: ${monto_disponible:.2f}"}), 400
+
+    try:
+        fecha = datetime.now().strftime("%Y-%m-%d")
+        fecha_creacion = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        cursor.execute("""
+        INSERT INTO transacciones(usuario_id, categoria_id, monto, tipo, descripcion, fecha, fecha_creacion)
+        VALUES(?, ?, ?, ?, ?, ?, ?)
+        """, (session['user_id'], categoria['id'], monto, 'ingreso', f"Retiro de meta {meta['nombre']}", fecha, fecha_creacion))
+
+        conn.commit()
+        conn.close()
+
+        registrar_log(session['username'], f"saco ${monto} de meta {meta['nombre']}")
+
+        recalcular_monto_meta(id)
+
+        return jsonify({"mensaje": "dinero sacado de meta"}), 201
+    except Exception as e:
+        conn.close()
+        return jsonify({"error": str(e)}), 400
+
+# =====================================================
+# rutas de deudas
+# =====================================================
+
+@app.route('/api/deudas', methods=['GET'])
+@api_login_required
+def obtener_deudas():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT * FROM deudas
+    WHERE usuario_id = ?
+    ORDER BY fecha_vencimiento
+    """, (session['user_id'],))
+
+    deudas = cursor.fetchall()
+    resultado = []
+
+    for deuda in deudas:
+        deuda_dict = dict(deuda)
+
+        cursor.execute("""
+        SELECT COALESCE(SUM(monto), 0) as total_pagado
+        FROM transacciones t
+        JOIN categorias c ON t.categoria_id = c.id
+        WHERE c.deuda_id = ? AND t.tipo = 'gasto'
+        """, (deuda['id'],))
+
+        pago = cursor.fetchone()
+        deuda_dict['monto_pagado'] = pago['total_pagado'] if pago else 0
+        resultado.append(deuda_dict)
+
+    conn.close()
+    registrar_log(session['username'], "consulto deudas")
+
+    return jsonify(resultado), 200
+
+@app.route('/api/deudas', methods=['POST'])
+@api_login_required
+@privilegio_required('crear_deuda')
+def crear_deuda():
+    data = request.get_json()
+    nombre = data.get('nombre', '').strip()
+    monto_total = data.get('monto_total')
+    acreedor = data.get('acreedor', '').strip()
+    fecha_vencimiento = data.get('fecha_vencimiento')
+    tasa_interes = data.get('tasa_interes', 0)
+    descripcion = data.get('descripcion', '')
+
+    if not nombre or not monto_total or not acreedor:
+        return jsonify({"error": "nombre, monto_total y acreedor son requeridos"}), 400
+
+    try:
+        monto_total = float(monto_total)
+        if monto_total <= 0:
+            return jsonify({"error": "monto_total debe ser mayor a 0"}), 400
+    except ValueError:
+        return jsonify({"error": "monto_total invalido"}), 400
+
+    try:
+        tasa_interes = float(tasa_interes)
+        if tasa_interes < 0:
+            return jsonify({"error": "tasa_interes no puede ser negativa"}), 400
+    except ValueError:
+        return jsonify({"error": "tasa_interes invalida"}), 400
+
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        fecha_creacion = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        cursor.execute("""
+        INSERT INTO deudas(usuario_id, nombre, monto_total, acreedor, fecha_vencimiento, tasa_interes, descripcion, fecha_creacion)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+        """, (session['user_id'], nombre, monto_total, acreedor, fecha_vencimiento, tasa_interes, descripcion, fecha_creacion))
+
+        conn.commit()
+        deuda_id = cursor.lastrowid
+
+        fecha_cat = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        cursor.execute("""
+        INSERT OR IGNORE INTO categorias(usuario_id, nombre, tipo, deuda_id, fecha_creacion)
+        VALUES(?, ?, ?, ?, ?)
+        """, (session['user_id'], nombre, 'gasto', deuda_id, fecha_cat))
+
+        conn.commit()
+        conn.close()
+
+        registrar_log(session['username'], f"creo deuda '{nombre}' por ${monto_total}")
+
+        return jsonify({
+            "id": deuda_id,
+            "mensaje": "deuda creada correctamente"
+        }), 201
+    except Exception as e:
+        conn.close()
+        return jsonify({"error": str(e)}), 400
+
+@app.route('/api/deudas/<int:id>', methods=['PUT'])
+@api_login_required
+@privilegio_required('editar_deuda')
+def editar_deuda(id):
+    data = request.get_json()
+    nombre = data.get('nombre')
+    monto_total = data.get('monto_total')
+    monto_pagado = data.get('monto_pagado')
+    acreedor = data.get('acreedor')
+    fecha_vencimiento = data.get('fecha_vencimiento')
+    tasa_interes = data.get('tasa_interes')
+    estado = data.get('estado')
+    descripcion = data.get('descripcion')
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM deudas WHERE id=? AND usuario_id=?",
+                  (id, session['user_id']))
+    deuda = cursor.fetchone()
+
+    if not deuda:
+        conn.close()
+        return jsonify({"error": "deuda no existe"}), 404
+
+    if estado and estado not in ['activa', 'pagada', 'cancelada']:
+        conn.close()
+        return jsonify({"error": "estado invalido"}), 400
+
+    if monto_total:
+        try:
+            monto_total = float(monto_total)
+            if monto_total <= 0:
+                conn.close()
+                return jsonify({"error": "monto_total debe ser mayor a 0"}), 400
+        except ValueError:
+            conn.close()
+            return jsonify({"error": "monto_total invalido"}), 400
+
+    if monto_pagado is not None:
+        try:
+            monto_pagado = float(monto_pagado)
+            if monto_pagado < 0:
+                conn.close()
+                return jsonify({"error": "monto_pagado no puede ser negativo"}), 400
+        except ValueError:
+            conn.close()
+            return jsonify({"error": "monto_pagado invalido"}), 400
+
+    if tasa_interes is not None:
+        try:
+            tasa_interes = float(tasa_interes)
+            if tasa_interes < 0:
+                conn.close()
+                return jsonify({"error": "tasa_interes no puede ser negativa"}), 400
+        except ValueError:
+            conn.close()
+            return jsonify({"error": "tasa_interes invalida"}), 400
+
+    cursor.execute("""
+    UPDATE deudas
+    SET nombre = COALESCE(?, nombre),
+        monto_total = COALESCE(?, monto_total),
+        monto_pagado = COALESCE(?, monto_pagado),
+        acreedor = COALESCE(?, acreedor),
+        fecha_vencimiento = COALESCE(?, fecha_vencimiento),
+        tasa_interes = COALESCE(?, tasa_interes),
+        estado = COALESCE(?, estado),
+        descripcion = COALESCE(?, descripcion)
+    WHERE id = ? AND usuario_id = ?
+    """, (nombre, monto_total, monto_pagado, acreedor, fecha_vencimiento, tasa_interes, estado, descripcion, id, session['user_id']))
+
+    conn.commit()
+    conn.close()
+
+    registrar_log(session['username'], f"edito deuda {id}")
+
+    return jsonify({"mensaje": "deuda actualizada correctamente"}), 200
+
+@app.route('/api/deudas/<int:id>', methods=['DELETE'])
+@api_login_required
+@privilegio_required('eliminar_deuda')
+def eliminar_deuda(id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM deudas WHERE id=? AND usuario_id=?",
+                  (id, session['user_id']))
+    deuda = cursor.fetchone()
+
+    if not deuda:
+        conn.close()
+        return jsonify({"error": "deuda no existe"}), 404
+
+    cursor.execute("DELETE FROM categorias WHERE deuda_id=?", (id,))
+    cursor.execute("DELETE FROM deudas WHERE id=? AND usuario_id=?",
+                  (id, session['user_id']))
+
+    conn.commit()
+    conn.close()
+
+    registrar_log(session['username'], f"elimino deuda {id}")
+
+    return jsonify({"mensaje": "deuda eliminada correctamente"}), 200
 
 # =====================================================
 # rutas de reportes
@@ -904,18 +1373,23 @@ def obtener_resumen():
     conn = get_connection()
     cursor = conn.cursor()
 
-    query = "SELECT SUM(monto) as total, tipo FROM transacciones WHERE usuario_id = ?"
+    query = """
+    SELECT SUM(t.monto) as total, t.tipo
+    FROM transacciones t
+    WHERE t.usuario_id = ?
+    AND NOT (t.tipo = 'ingreso' AND t.descripcion LIKE 'Retiro de meta%')
+    """
     params = [session['user_id']]
 
     if fecha_inicio:
-        query += " AND fecha >= ?"
+        query += " AND t.fecha >= ?"
         params.append(fecha_inicio)
 
     if fecha_fin:
-        query += " AND fecha <= ?"
+        query += " AND t.fecha <= ?"
         params.append(fecha_fin)
 
-    query += " GROUP BY tipo"
+    query += " GROUP BY t.tipo"
 
     cursor.execute(query, params)
     resultados = cursor.fetchall()
@@ -924,34 +1398,54 @@ def obtener_resumen():
     for row in resultados:
         totales[row['tipo']] = row['total'] or 0
 
-    query_categoria = """
-    SELECT c.nombre, c.color, SUM(t.monto) as total
+    cursor.execute("""
+    SELECT c.id, c.nombre, c.color, SUM(t.monto) as total
     FROM transacciones t
     JOIN categorias c ON t.categoria_id = c.id
     WHERE t.usuario_id = ? AND t.tipo = 'gasto'
-    """
-    params_categoria = [session['user_id']]
+    GROUP BY c.id ORDER BY total DESC
+    """, (session['user_id'],))
+    gasto_por_categoria_base = cursor.fetchall()
 
-    if fecha_inicio:
-        query_categoria += " AND t.fecha >= ?"
-        params_categoria.append(fecha_inicio)
+    cursor.execute("""
+    SELECT COALESCE(SUM(monto), 0) as total_retiros
+    FROM transacciones
+    WHERE usuario_id = ? AND tipo = 'ingreso' AND descripcion LIKE 'Retiro de meta%'
+    """, (session['user_id'],))
+    retiros_result = cursor.fetchone()
+    retiros_metas = retiros_result['total_retiros'] or 0
 
-    if fecha_fin:
-        query_categoria += " AND t.fecha <= ?"
-        params_categoria.append(fecha_fin)
+    cursor.execute("""
+    SELECT c.id, SUM(t.monto) as total_retiros
+    FROM transacciones t
+    JOIN categorias c ON t.categoria_id = c.id
+    WHERE t.usuario_id = ? AND t.tipo = 'ingreso' AND t.descripcion LIKE 'Retiro de meta%'
+    GROUP BY c.id
+    """, (session['user_id'],))
+    retiros_por_categoria = {row['id']: row['total_retiros'] for row in cursor.fetchall()}
 
-    query_categoria += " GROUP BY c.id ORDER BY total DESC"
-
-    cursor.execute(query_categoria, params_categoria)
-    gasto_por_categoria = [dict(row) for row in cursor.fetchall()]
+    gasto_por_categoria = []
+    for row in gasto_por_categoria_base:
+        total_neto = row['total'] - retiros_por_categoria.get(row['id'], 0)
+        if total_neto > 0:
+            gasto_por_categoria.append({
+                'nombre': row['nombre'],
+                'color': row['color'],
+                'total': total_neto
+            })
 
     conn.close()
     registrar_log(session['username'], "consulto resumen")
 
+    ingresos = totales.get('ingreso', 0)
+    gastos_totales = totales.get('gasto', 0)
+    gastos = gastos_totales - retiros_metas
+    balance = ingresos - gastos
+
     return jsonify({
-        "ingresos": totales.get('ingreso', 0),
-        "gastos": totales.get('gasto', 0),
-        "balance": totales.get('ingreso', 0) - totales.get('gasto', 0),
+        "ingresos": ingresos,
+        "gastos": gastos,
+        "balance": balance,
         "gasto_por_categoria": gasto_por_categoria
     }), 200
 
@@ -963,7 +1457,7 @@ def obtener_gastos_por_categoria():
     cursor = conn.cursor()
 
     cursor.execute("""
-    SELECT c.nombre, SUM(t.monto) as total
+    SELECT c.nombre, c.color, SUM(t.monto) as total
     FROM transacciones t
     JOIN categorias c ON t.categoria_id = c.id
     WHERE t.usuario_id = ? AND t.tipo = 'gasto'
@@ -1011,6 +1505,53 @@ def obtener_articulos_educativos():
     registrar_log(session['username'], "consulto contenido educativo")
 
     return jsonify(resultado), 200
+
+@app.route('/api/educacion/noticias', methods=['GET'])
+@api_login_required
+def obtener_noticias_financieras():
+    try:
+        import requests
+        api_key = os.environ.get('NEWS_API_KEY', '')
+
+        if api_key:
+            url = f"https://newsapi.org/v2/everything?q=finanzas+educación+personal&language=es&sortBy=publishedAt&apiKey={api_key}&pageSize=10"
+            response = requests.get(url, timeout=5)
+
+            if response.status_code == 200:
+                datos = response.json()
+                registrar_log(session['username'], "consulto noticias financieras")
+                return jsonify(datos.get('articles', [])), 200
+
+        noticias_ejemplo = [
+            {
+                "title": "Cómo empezar a ahorrar: consejos prácticos",
+                "description": "Descubre estrategias efectivas para comenzar tu viaje hacia la independencia financiera.",
+                "url": "#",
+                "publishedAt": datetime.now().isoformat(),
+                "source": {"name": "WalletUp"}
+            },
+            {
+                "title": "Entendiendo el interés compuesto",
+                "description": "El interés compuesto es la octava maravilla del mundo. Aprende cómo funciona en tu favor.",
+                "url": "#",
+                "publishedAt": datetime.now().isoformat(),
+                "source": {"name": "WalletUp"}
+            },
+            {
+                "title": "Presupuesto personal: guía paso a paso",
+                "description": "Controla tus gastos y alcanza tus metas financieras con un presupuesto bien planificado.",
+                "url": "#",
+                "publishedAt": datetime.now().isoformat(),
+                "source": {"name": "WalletUp"}
+            }
+        ]
+
+        registrar_log(session['username'], "consulto noticias financieras (ejemplo)")
+        return jsonify(noticias_ejemplo), 200
+
+    except Exception as e:
+        registrar_log(session['username'], f"error al consultar noticias: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 # =====================================================
 # rutas de alertas
@@ -1241,6 +1782,30 @@ def listar_backups():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
+@app.route('/api/auditoria', methods=['GET'])
+@api_login_required
+def obtener_auditoria_usuario():
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        SELECT * FROM logs
+        WHERE usuario = ?
+        ORDER BY fecha DESC
+        LIMIT 500
+        """, (session['username'],))
+
+        logs = cursor.fetchall()
+        conn.close()
+
+        resultado = [dict(l) for l in logs]
+        registrar_log(session['username'], "consulto su auditoria")
+
+        return jsonify(resultado), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
 # =====================================================
 # rutas para servir páginas HTML
 # =====================================================
@@ -1298,6 +1863,11 @@ def reportes_page():
 @login_required
 def educacion_page():
     return render_template('educacion.html')
+
+@app.route('/deudas')
+@login_required
+def deudas_page():
+    return render_template('deudas.html')
 
 # =====================================================
 # punto de entrada

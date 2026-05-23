@@ -87,6 +87,7 @@ async function guardarTransaccion(event) {
   const monto = document.getElementById('monto').value;
   const descripcion = document.getElementById('descripcion').value;
   const fecha = document.getElementById('fecha').value;
+  const transId = document.getElementById('formTransaccion').dataset.transId;
 
   if (!categoria_id) {
     showAlert('Selecciona una categoría', 'warning');
@@ -94,8 +95,12 @@ async function guardarTransaccion(event) {
   }
 
   try {
-    await fetchWithAuth(`${API_BASE}/transacciones`, {
-      method: 'POST',
+    const isEditing = transId && transId !== '';
+    const method = isEditing ? 'PUT' : 'POST';
+    const url = isEditing ? `${API_BASE}/transacciones/${transId}` : `${API_BASE}/transacciones`;
+
+    await fetchWithAuth(url, {
+      method,
       body: JSON.stringify({
         categoria_id: parseInt(categoria_id),
         monto: parseFloat(monto),
@@ -105,10 +110,45 @@ async function guardarTransaccion(event) {
       })
     });
 
-    showAlert('Transacción guardada', 'success');
+    showAlert(isEditing ? 'Transacción actualizada' : 'Transacción guardada', 'success');
+    document.getElementById('formTransaccion').dataset.transId = '';
     cerrarModal('modalTransaccion');
     cargarTransacciones();
 
+  } catch (error) {
+    showAlert('Error: ' + error.message, 'danger');
+  }
+}
+
+async function editarTransaccion(id) {
+  try {
+    const transacciones = await fetchWithAuth(`${API_BASE}/transacciones`);
+    const transaccion = transacciones.find(t => t.id === id);
+
+    if (!transaccion) {
+      showAlert('Transacción no encontrada', 'danger');
+      return;
+    }
+
+    tipoActual = transaccion.tipo;
+
+    // Cargar opciones de categoría
+    const catSelect = document.getElementById('categoria');
+    catSelect.innerHTML = '<option value="">Selecciona una categoría</option>';
+
+    const catsFiltradas = categorias.filter(c => c.tipo === tipoActual);
+    catsFiltradas.forEach(cat => {
+      catSelect.innerHTML += `<option value="${cat.id}">${cat.nombre}</option>`;
+    });
+
+    // Asignar valores
+    document.getElementById('categoria').value = transaccion.categoria_id;
+    document.getElementById('monto').value = transaccion.monto;
+    document.getElementById('descripcion').value = transaccion.descripcion || '';
+    document.getElementById('fecha').value = transaccion.fecha;
+    document.getElementById('formTransaccion').dataset.transId = id;
+
+    document.getElementById('modalTransaccion').classList.add('show');
   } catch (error) {
     showAlert('Error: ' + error.message, 'danger');
   }

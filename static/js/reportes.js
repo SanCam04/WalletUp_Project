@@ -40,6 +40,7 @@ function actualizarGraficoGastos(datos) {
 
   const labels = datos.map(d => d.nombre);
   const values = datos.map(d => d.total);
+  const colors = datos.map(d => d.color || '#667eea');
 
   if (chartGastos) chartGastos.destroy();
 
@@ -49,10 +50,7 @@ function actualizarGraficoGastos(datos) {
       labels: labels,
       datasets: [{
         data: values,
-        backgroundColor: [
-          '#667eea', '#764ba2', '#f093fb', '#4facfe',
-          '#43e97b', '#fa709a', '#fee140', '#30b0fe'
-        ]
+        backgroundColor: colors
       }]
     },
     options: {
@@ -79,7 +77,8 @@ function mostrarTopCategorias(datos) {
 
   datos.sort((a, b) => (b.total || 0) - (a.total || 0)).slice(0, 10).forEach(d => {
     const porcentaje = total > 0 ? ((d.total / total) * 100).toFixed(1) : 0;
-    html += `<tr><td>${d.nombre}</td><td style="text-align: right;">${formatMoney(d.total)}</td><td style="text-align: right;">${porcentaje}%</td></tr>`;
+    const colorIndicador = d.color || '#667eea';
+    html += `<tr><td><span style="display: inline-block; width: 12px; height: 12px; background-color: ${colorIndicador}; border-radius: 3px; margin-right: 8px;"></span>${d.nombre}</td><td style="text-align: right;">${formatMoney(d.total)}</td><td style="text-align: right;">${porcentaje}%</td></tr>`;
   });
 
   html += '</table>';

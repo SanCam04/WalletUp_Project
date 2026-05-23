@@ -127,34 +127,20 @@ async function anadirDinero(event) {
   event.preventDefault();
 
   const metaId = document.getElementById('metaIdActual').value;
-  const montoAnadir = parseFloat(document.getElementById('montoAnadir').value);
+  const monto = parseFloat(document.getElementById('montoAnadir').value);
 
-  if (!montoAnadir || montoAnadir <= 0) {
+  if (!monto || monto <= 0) {
     showAlert('Ingresa un monto válido', 'warning');
     return;
   }
 
   try {
-    // Obtener la meta actual
-    const metas = await fetchWithAuth(`${API_BASE}/metas`);
-    const meta = metas.find(m => m.id == metaId);
-
-    if (!meta) {
-      showAlert('Meta no encontrada', 'danger');
-      return;
-    }
-
-    const nuevoMonto = meta.monto_actual + montoAnadir;
-
-    // Actualizar la meta
-    await fetchWithAuth(`${API_BASE}/metas/${metaId}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        monto_actual: nuevoMonto
-      })
+    await fetchWithAuth(`${API_BASE}/metas/${metaId}/agregar`, {
+      method: 'POST',
+      body: JSON.stringify({ monto })
     });
 
-    showAlert(`¡${formatMoney(montoAnadir)} añadidos a la meta!`, 'success');
+    showAlert(`¡${formatMoney(monto)} añadidos a la meta!`, 'success');
     cerrarModal('modalAnadir');
     cargarMetas();
 
@@ -167,34 +153,20 @@ async function quitarDinero(event) {
   event.preventDefault();
 
   const metaId = document.getElementById('metaIdActualQuitar').value;
-  const montoQuitar = parseFloat(document.getElementById('montoQuitar').value);
+  const monto = parseFloat(document.getElementById('montoQuitar').value);
 
-  if (!montoQuitar || montoQuitar <= 0) {
+  if (!monto || monto <= 0) {
     showAlert('Ingresa un monto válido', 'warning');
     return;
   }
 
   try {
-    // Obtener la meta actual
-    const metas = await fetchWithAuth(`${API_BASE}/metas`);
-    const meta = metas.find(m => m.id == metaId);
-
-    if (!meta) {
-      showAlert('Meta no encontrada', 'danger');
-      return;
-    }
-
-    const nuevoMonto = Math.max(0, meta.monto_actual - montoQuitar);
-
-    // Actualizar la meta
-    await fetchWithAuth(`${API_BASE}/metas/${metaId}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        monto_actual: nuevoMonto
-      })
+    await fetchWithAuth(`${API_BASE}/metas/${metaId}/sacar`, {
+      method: 'POST',
+      body: JSON.stringify({ monto })
     });
 
-    showAlert(`¡${formatMoney(montoQuitar)} retirados de la meta!`, 'success');
+    showAlert(`¡${formatMoney(monto)} retirados de la meta!`, 'success');
     cerrarModal('modalQuitar');
     cargarMetas();
 
