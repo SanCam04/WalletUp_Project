@@ -1,0 +1,22 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+        <!-- Logo Falabella (izquierda) -->
+        <a class="navbar-brand" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/banco-falabella.png') }}" alt="Falabella CDAT Logo"
+                class="logo-navbar" style="height: 50px; width: auto;">
+        </a>
+
+        <!-- Botones (derecha) -->
+        <div class="d-flex align-items-center gap-3">
+            <!-- Botón Hazte Cliente (gris) -->
+            <button class="btn btn-hazte-cliente" style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 500;">
+                HAZTE CLIENTE
+            </button>
+
+            <!-- Botón Banca en Línea (verde) -->
+            <button class="btn btn-banca-linea" style="background-color: #00a651; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 500;">
+                BANCA EN LÍNEA
+            </button>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,140 @@
+/* Navbar Styles */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 12px 30px;
+}
+
+.navbar .container-fluid {
+    padding: 0;
+}
+
+.logo-navbar {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.logo-navbar:hover {
+    transform: scale(1.05);
+}
+
+/* Menu Hamburguesa */
+.nav-link {
+    font-weight: 500;
+    color: #333 !important;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #91c93f !important;
+}
+
+/* Search Form */
+.search-form {
+    min-width: 200px;
+    margin: 0 15px;
+}
+
+.search-form .form-control {
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+.search-form .form-control:focus {
+    border-color: #91c93f;
+    box-shadow: 0 0 0 0.2rem rgba(145, 201, 63, 0.25);
+}
+
+/* Carrito de compras */
+.nav-link {
+    font-size: 20px;
+}
+
+/* Carrusel de Banners - FULL WIDTH */
+.carousel-container {
+    position: relative;
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-bottom: 40px;
+    overflow: hidden;
+}
+
+.banner-img {
+    height: 500px;
+    object-fit: cover;
+    display: block;
+    width: 100%;
+}
+
+.carousel {
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    background-color: #000;
+    width: 100%;
+    margin: 0;
+}
+
+.carousel-inner {
+    border-radius: 20px;
+}
+
+/* Controles del Carrusel */
+.carousel-control-prev,
+.carousel-control-next {
+    width: auto;
+    height: auto;
+    background-color: transparent;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Indicadores */
+.carousel-indicators {
+    bottom: 25px;
+    gap: 8px;
+}
+
+.carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.carousel-indicators button:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.2);
+}
+
+.carousel-indicators button.active {
+    background-color: #91c93f;
+    width: 14px;
+    height: 14px;
+}

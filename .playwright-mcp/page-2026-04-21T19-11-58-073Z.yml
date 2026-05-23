@@ -1,0 +1,27 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - heading "Gestion de Restaurante" [level=3] [ref=e5]
+    - paragraph [ref=e6]: Sistema de Login RBAC
+  - generic [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e10]: Usuario
+      - textbox "Usuario" [ref=e11]:
+        - /placeholder: Ingrese su usuario
+      - generic [ref=e12]: Usuario es requerido
+    - generic [ref=e13]:
+      - generic [ref=e14]: Contrasena
+      - textbox "Contrasena" [ref=e15]:
+        - /placeholder: Ingrese su contrasena
+      - generic [ref=e16]: Contrasena es requerida
+    - button "Iniciar Sesion" [ref=e17] [cursor=pointer]
+  - generic [ref=e18]:
+    - paragraph [ref=e19]: "Usuarios de prueba:"
+    - paragraph [ref=e20]:
+      - strong [ref=e21]: admin
+      - text: "- Admin#2026"
+    - paragraph [ref=e22]:
+      - strong [ref=e23]: mesero1
+      - text: "- Mesero#2026"
+    - paragraph [ref=e24]:
+      - strong [ref=e25]: cocinero1
+      - text: "- Cocinero#2026"

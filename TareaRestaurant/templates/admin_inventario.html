@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block titulo %}Gestion de Inventario - Gestion Restaurante{% endblock %}
+
+{% block contenido %}
+<!-- Seccion de inventario -->
+<div class="row">
+    <!-- Card superior: Formulario de compra -->
+    <div class="col-12 mb-4">
+        <div class="card">
+            <!-- Encabezado -->
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Registrar Compra a Proveedor</h5>
+            </div>
+
+            <!-- Contenido -->
+            <div class="card-body">
+                <!-- Mostrar mensajes flash -->
+                {% with messages = get_flashed_messages(category_filter=['success']) %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% with messages = get_flashed_messages(category_filter=['danger']) %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Formulario de compra -->
+                <form method="POST" action="{{ url_for('admin_crear_compra') }}" class="needs-validation" novalidate>
+                    <div class="row">
+                        <!-- Proveedor -->
+                        <div class="col-md-2 mb-3">
+                            <label for="proveedor_id" class="form-label">Proveedor</label>
+                            <select class="form-select" id="proveedor_id" name="proveedor_id" required onchange="actualizarPrecio()">
+                                <option value="">-- Seleccione un proveedor --</option>
+                                {% for proveedor in proveedores %}
+                                    <option value="{{ proveedor.id }}" data-precio="{{ proveedor.precio }}" data-producto="{{ proveedor.producto }}">
+                                        {{ proveedor.nombre_empresa }} - {{ proveedor.producto }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Proveedor es requerido
+                            </div>
+                        </div>
+
+                        <!-- Cantidad -->
+                        <div class="col-md-2 mb-3">
+                            <label for="cantidad" class="form-label">Cantidad</label>
+                            <input type="number" class="form-control" id="cantidad" name="cantidad" step="0.01" placeholder="0" required onchange="actualizarPrecio()">
+                            <div class="invalid-feedback">
+                                Cantidad es requerida
+                            </div>
+                        </div>
+
+                        <!-- Porciones por unidad -->
+                        <div class="col-md-2 mb-3">
+                            <label for="porciones_por_unidad" class="form-label">Porciones/Unidad</label>
+                            <input type="number" class="form-control" id="porciones_por_unidad" name="porciones_por_unidad" min="1" step="1" value="1" onchange="actualizarPrecio()">
+                            <small class="text-muted d-block">1 = sin dividir</small>
+                        </div>
+
+                        <!-- Precio unitario (solo lectura) -->
+                        <div class="col-md-2 mb-3">
+                            <label for="precio_unitario" class="form-label">Precio Unit.</label>
+                            <input type="text" class="form-control" id="precio_unitario" readonly placeholder="$0.00">
+                        </div>
+
+                        <!-- Precio total (solo lectura) -->
+                        <div class="col-md-2 mb-3">
+                            <label for="precio_total" class="form-label">Precio Total</label>
+                            <input type="text" class="form-control" id="precio_total" readonly placeholder="$0.00">
+                        </div>
+
+                        <!-- Fecha -->
+                        <div class="col-md-1 mb-3">
+                            <label for="fecha" class="form-label">Fecha</label>
+                            <input type="date" class="form-control" id="fecha" name="fecha" required>
+                            <div class="invalid-feedback">
+                                Fecha es requerida
+                            </div>
+                        </div>
+
+                        <!-- Boton submit -->
+                        <div class="col-md-1 mb-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                Registrar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card izquierda: Inventario actual -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <!-- Encabezado -->
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Inventario Actual</h5>
+            </div>
+
+            <!-- Contenido -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Unidad</th>
+                                <th>Precio Unit.</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Iterar sobre inventario -->
+                            {% for item in inventario %}
+                                <tr>
+                                    <td>{{ item.nombre_producto }}</td>
+                                    <td>{{ "%.2f"|format(item.cantidad) }}</td>
+                                    <td>{{ item.unidad }}</td>
+                                    <td>${{ "%.2f"|format(item.precio_unitario) }}</td>
+                                    <td>
+                                        <!-- Boton editar -->
+                                        <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditar{{ item.id }}">
+                                            Editar
+                                        </button>
+
+                                        <!-- Boton eliminar -->
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar{{ item.id }}">
+                                            Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Modal editar inventario -->
+                                <div class="modal fade" id="modalEditar{{ item.id }}" tabindex="-1">
+                                    <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-warning">
+                                                <h5 class="modal-title">Editar {{ item.nombre_producto }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <form method="POST" action="{{ url_for('admin_editar_inventario', id=item.id) }}" class="needs-validation" novalidate>
+                                                <div class="modal-body">
+                                                    <div class="mb-2">
+                                                        <label for="cantidad_{{ item.id }}" class="form-label">Cantidad</label>
+                                                        <input type="number" class="form-control" id="cantidad_{{ item.id }}" name="cantidad" step="0.01" value="{{ item.cantidad }}" required>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <label for="unidad_{{ item.id }}" class="form-label">Unidad</label>
+                                                        <input type="text" class="form-control" id="unidad_{{ item.id }}" name="unidad" value="{{ item.unidad }}" required>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <label for="precio_{{ item.id }}" class="form-label">Precio Unitario</label>
+                                                        <input type="number" class="form-control" id="precio_{{ item.id }}" name="precio_unitario" step="0.01" value="{{ item.precio_unitario }}" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-warning">Actualizar</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Modal eliminar inventario -->
+                                <div class="modal fade" id="modalEliminar{{ item.id }}" tabindex="-1">
+                                    <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title">Eliminar Producto</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>¿Eliminar <strong>{{ item.nombre_producto }}</strong> del inventario?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <form method="POST" action="{{ url_for('admin_eliminar_inventario', id=item.id) }}" style="display: inline;">
+                                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <!-- Si no hay items en inventario -->
+                    {% if not inventario %}
+                        <div class="alert alert-info mb-0">
+                            No hay items en el inventario
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card derecha: Historico de compras -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <!-- Encabezado -->
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Ultimas Compras Registradas</h5>
+            </div>
+
+            <!-- Contenido -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Proveedor</th>
+                                <th>Producto</th>
+                                <th>Cant.</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Iterar sobre compras -->
+                            {% for compra in compras %}
+                                <tr>
+                                    <td>{{ compra.fecha }}</td>
+                                    <td><small>{{ compra.nombre_empresa }}</small></td>
+                                    <td><small>{{ compra.producto }}</small></td>
+                                    <td>{{ "%.2f"|format(compra.cantidad) }}</td>
+                                    <td><strong>${{ "%.2f"|format(compra.precio_total) }}</strong></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <!-- Si no hay compras -->
+                    {% if not compras %}
+                        <div class="alert alert-info mb-0">
+                            No hay compras registradas
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Enlace a script personalizado para admin inventario -->
+<script src="{{ url_for('static', filename='js/admin_inventario.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Contacto{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h3>Formulario de Contacto</h3>
+        <form action="/usuario" method="post">
+            <input type="text" name="nombre">
+            <input type="submit" value="Enviar">
+        </form>
+        <p>{{ nombreU }}</p>
+    </div>
+</div>
+{% endblock %}

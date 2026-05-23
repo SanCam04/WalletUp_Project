@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block titulo %}Gestion de Proveedores - Gestion Restaurante{% endblock %}
+
+{% block contenido %}
+<!-- Seccion de gestion de proveedores -->
+<div class="row">
+    <!-- Columna izquierda: formulario de crear proveedor -->
+    <div class="col-lg-4 mb-4">
+        <!-- Card para crear proveedor -->
+        <div class="card">
+            <!-- Encabezado de la card -->
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Crear Nuevo Proveedor</h5>
+            </div>
+
+            <!-- Contenido de la card -->
+            <div class="card-body">
+                <!-- Mostrar mensajes flash -->
+                {% with messages = get_flashed_messages(category_filter=['success']) %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <!-- Alerta de exito -->
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% with messages = get_flashed_messages(category_filter=['danger']) %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <!-- Alerta de error -->
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Formulario para crear proveedor -->
+                <form method="POST" action="{{ url_for('admin_crear_proveedor') }}" class="needs-validation" novalidate>
+                    <!-- Campo de nombre empresa -->
+                    <div class="mb-3">
+                        <label for="nombre_empresa" class="form-label">Nombre Empresa</label>
+                        <input type="text" class="form-control" id="nombre_empresa" name="nombre_empresa" placeholder="ej. Distrialimentos" required>
+                        <div class="invalid-feedback">
+                            Nombre empresa es requerido
+                        </div>
+                    </div>
+
+                    <!-- Campo de telefono -->
+                    <div class="mb-3">
+                        <label for="telefono" class="form-label">Telefono</label>
+                        <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="ej. 3001234567" required>
+                        <div class="invalid-feedback">
+                            Telefono es requerido
+                        </div>
+                    </div>
+
+                    <!-- Campo de producto -->
+                    <div class="mb-3">
+                        <label for="producto" class="form-label">Producto</label>
+                        <input type="text" class="form-control" id="producto" name="producto" placeholder="ej. Pollo x lb" required>
+                        <div class="invalid-feedback">
+                            Producto es requerido
+                        </div>
+                    </div>
+
+                    <!-- Campo de precio -->
+                    <div class="mb-3">
+                        <label for="precio" class="form-label">Precio Unitario</label>
+                        <input type="number" class="form-control" id="precio" name="precio" step="0.01" placeholder="0.00" required>
+                        <div class="invalid-feedback">
+                            Precio es requerido
+                        </div>
+                    </div>
+
+                    <!-- Boton de submit -->
+                    <button type="submit" class="btn btn-success w-100">
+                        Crear Proveedor
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Columna derecha: tabla de proveedores -->
+    <div class="col-lg-8">
+        <!-- Card para listar proveedores -->
+        <div class="card">
+            <!-- Encabezado de la card -->
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Proveedores Registrados</h5>
+            </div>
+
+            <!-- Contenido de la card -->
+            <div class="card-body">
+                <!-- Tabla de proveedores -->
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <!-- Encabezados de la tabla -->
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Empresa</th>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Telefono</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <!-- Cuerpo de la tabla -->
+                        <tbody>
+                            <!-- Iterar sobre cada proveedor -->
+                            {% for proveedor in proveedores %}
+                                <tr>
+                                    <!-- ID del proveedor -->
+                                    <td>{{ proveedor.id }}</td>
+
+                                    <!-- Nombre empresa -->
+                                    <td>{{ proveedor.nombre_empresa }}</td>
+
+                                    <!-- Producto -->
+                                    <td>{{ proveedor.producto }}</td>
+
+                                    <!-- Precio -->
+                                    <td>${{ "%.2f"|format(proveedor.precio) }}</td>
+
+                                    <!-- Telefono -->
+                                    <td>{{ proveedor.telefono }}</td>
+
+                                    <!-- Acciones -->
+                                    <td>
+                                        <!-- Boton editar -->
+                                        <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditar{{ proveedor.id }}">
+                                            Editar
+                                        </button>
+
+                                        <!-- Boton eliminar -->
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar{{ proveedor.id }}">
+                                            Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Modal para editar proveedor -->
+                                <div class="modal fade" id="modalEditar{{ proveedor.id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <!-- Encabezado del modal -->
+                                            <div class="modal-header bg-warning">
+                                                <h5 class="modal-title">Editar Proveedor</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <!-- Cuerpo del modal -->
+                                            <form method="POST" action="{{ url_for('admin_editar_proveedor', id=proveedor.id) }}" class="needs-validation" novalidate>
+                                                <div class="modal-body">
+                                                    <!-- Campo nombre empresa -->
+                                                    <div class="mb-3">
+                                                        <label for="nombre_empresa_{{ proveedor.id }}" class="form-label">Nombre Empresa</label>
+                                                        <input type="text" class="form-control" id="nombre_empresa_{{ proveedor.id }}" name="nombre_empresa" value="{{ proveedor.nombre_empresa }}" required>
+                                                    </div>
+
+                                                    <!-- Campo telefono -->
+                                                    <div class="mb-3">
+                                                        <label for="telefono_{{ proveedor.id }}" class="form-label">Telefono</label>
+                                                        <input type="tel" class="form-control" id="telefono_{{ proveedor.id }}" name="telefono" value="{{ proveedor.telefono }}" required>
+                                                    </div>
+
+                                                    <!-- Campo producto -->
+                                                    <div class="mb-3">
+                                                        <label for="producto_{{ proveedor.id }}" class="form-label">Producto</label>
+                                                        <input type="text" class="form-control" id="producto_{{ proveedor.id }}" name="producto" value="{{ proveedor.producto }}" required>
+                                                    </div>
+
+                                                    <!-- Campo precio -->
+                                                    <div class="mb-3">
+                                                        <label for="precio_{{ proveedor.id }}" class="form-label">Precio Unitario</label>
+                                                        <input type="number" class="form-control" id="precio_{{ proveedor.id }}" name="precio" step="0.01" value="{{ proveedor.precio }}" required>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Pie del modal -->
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-warning">Actualizar Proveedor</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Modal para eliminar proveedor -->
+                                <div class="modal fade" id="modalEliminar{{ proveedor.id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <!-- Encabezado del modal -->
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title">Eliminar Proveedor</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <!-- Cuerpo del modal -->
+                                            <div class="modal-body">
+                                                <p>¿Estás seguro de que deseas eliminar el proveedor <strong>{{ proveedor.nombre_empresa }}</strong>?</p>
+                                                <p class="text-muted small">Nota: No se puede eliminar si tiene compras registradas</p>
+                                            </div>
+
+                                            <!-- Pie del modal -->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <form method="POST" action="{{ url_for('admin_eliminar_proveedor', id=proveedor.id) }}" style="display: inline;">
+                                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <!-- Si no hay proveedores -->
+                    {% if not proveedores %}
+                        <div class="alert alert-info mb-0">
+                            No hay proveedores registrados
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Enlace a script personalizado para admin proveedores -->
+<script src="{{ url_for('static', filename='js/admin_proveedores.js') }}"></script>
+{% endblock %}

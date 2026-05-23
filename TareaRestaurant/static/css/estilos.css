@@ -1,0 +1,306 @@
+/* Estilos globales de la aplicacion */
+
+/* HTML ocupa altura completa */
+html {
+    /* Altura minima del viewport */
+    height: 100%;
+}
+
+/* Estilo del cuerpo de la pagina */
+body {
+    /* Color de fondo gris claro */
+    background-color: #f8f9fa;
+
+    /* Familia de fuentes por defecto */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    /* Distribucion vertical con flexbox */
+    display: flex;
+
+    /* Direccion columna para estructura vertical */
+    flex-direction: column;
+
+    /* Altura minima completa */
+    min-height: 100vh;
+
+    /* Margen cero */
+    margin: 0;
+
+    /* Padding cero */
+    padding: 0;
+}
+
+/* Estilo de la navegacion */
+nav.navbar {
+    /* Sombra en la navegacion */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    /* No se encoge */
+    flex-shrink: 0;
+}
+
+/* Contenedor principal crece para ocupar espacio */
+.content-wrapper {
+    /* Crece para ocupar espacio disponible */
+    flex: 1;
+
+    /* Display flex para contenido interno */
+    display: flex;
+
+    /* Direccion columna */
+    flex-direction: column;
+}
+
+/* Estilo del contenedor principal */
+.container {
+    /* Flex crecimiento para ocupar espacio disponible */
+    flex: 1;
+}
+
+/* Estilo de las tarjetas */
+.card {
+    /* Borde redondeado */
+    border-radius: 8px;
+
+    /* Borde transparente */
+    border: none;
+
+    /* Transicion suave de propiedades */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efecto hover en las tarjetas */
+.card:hover {
+    /* Transformacion de escala al pasar el mouse */
+    transform: translateY(-5px);
+
+    /* Sombra aumentada al pasar el mouse */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Estilo de los encabezados de tarjeta */
+.card-header {
+    /* Borde redondeado superior */
+    border-radius: 8px 8px 0 0;
+
+    /* Sin borde */
+    border: none;
+}
+
+/* Estilo del pie de tarjeta */
+.card-footer {
+    /* Borde redondeado inferior */
+    border-radius: 0 0 8px 8px;
+
+    /* Color de fondo claro */
+    background-color: #f8f9fa;
+
+    /* Borde superior sutil */
+    border-top: 1px solid #dee2e6;
+}
+
+/* Estilo de los botones */
+.btn {
+    /* Fuente mas gruesa */
+    font-weight: 600;
+
+    /* Transicion suave */
+    transition: all 0.3s ease;
+
+    /* Radio de borde */
+    border-radius: 6px;
+
+    /* Sin borde de boton por defecto */
+    border: none;
+}
+
+/* Efecto hover en botones */
+.btn:hover {
+    /* Transformacion de escala */
+    transform: scale(1.02);
+
+    /* Sombra al pasar el mouse */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo de los inputs de formulario */
+.form-control,
+.form-select {
+    /* Borde sutil */
+    border: 1px solid #dee2e6;
+
+    /* Transicion suave */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+    /* Radio de borde */
+    border-radius: 6px;
+}
+
+/* Efecto focus en inputs */
+.form-control:focus,
+.form-select:focus {
+    /* Color de borde en focus */
+    border-color: #0d6efd;
+
+    /* Sombra en focus */
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Estilo de las tablas */
+.table {
+    /* Margenes inferiores cero */
+    margin-bottom: 0;
+
+    /* Tamanio de fuente reducido */
+    font-size: 0.875rem;
+}
+
+/* Estilo de las filas de tabla */
+.table tbody tr {
+    /* Transicion suave */
+    transition: background-color 0.2s ease;
+}
+
+/* Efecto hover en filas de tabla */
+.table tbody tr:hover {
+    /* Color de fondo en hover */
+    background-color: #e9ecef !important;
+}
+
+/* Estilo del encabezado de tabla */
+.table thead th {
+    /* Color de fondo oscuro */
+    background-color: #f8f9fa;
+
+    /* Color de fuente oscuro */
+    color: #495057;
+
+    /* Fuente mas gruesa */
+    font-weight: 600;
+
+    /* Borde inferior */
+    border-bottom: 2px solid #dee2e6;
+
+    /* Padding vertical */
+    padding-top: 0.75rem;
+
+    /* Padding inferior */
+    padding-bottom: 0.75rem;
+}
+
+/* Estilo de los textos encabezados */
+h1, h2, h3, h4, h5, h6 {
+    /* Color azul oscuro */
+    color: #1a3a5c;
+
+    /* Margen inferior */
+    margin-bottom: 1rem;
+
+    /* Fuente mas gruesa */
+    font-weight: 700;
+}
+
+/* Estilo del parrafo lead */
+.lead {
+    /* Color gris oscuro */
+    color: #6c757d;
+
+    /* Tamanio de fuente mas grande */
+    font-size: 1.1rem;
+}
+
+/* Estilo del footer */
+footer {
+    /* No crece ni se encoge */
+    flex-shrink: 0;
+
+    /* Margen superior cero */
+    margin-top: 0;
+
+    /* Margen inferior cero */
+    margin-bottom: 0;
+}
+
+/* Estilo para color de fondo purple */
+.bg-purple {
+    /* Color de fondo purple */
+    background-color: #6f42c1 !important;
+}
+
+/* Estilo de badges o etiquetas */
+.badge {
+    /* Padding vertical */
+    padding-top: 0.5rem;
+
+    /* Padding inferior */
+    padding-bottom: 0.5rem;
+
+    /* Padding izquierdo */
+    padding-left: 0.75rem;
+
+    /* Padding derecho */
+    padding-right: 0.75rem;
+
+    /* Radio de borde */
+    border-radius: 20px;
+
+    /* Fuente mas gruesa */
+    font-weight: 500;
+}
+
+/* Estilos responsivos para pantallas pequenas */
+@media (max-width: 768px) {
+    /* Contenedor en pantallas pequenas */
+    .container {
+        /* Padding reducido */
+        padding-left: 0.5rem;
+
+        /* Padding derecho reducido */
+        padding-right: 0.5rem;
+    }
+
+    /* Tarjetas en pantallas pequenas */
+    .card {
+        /* Margen inferior */
+        margin-bottom: 1rem;
+    }
+
+    /* Titulo principal en pantallas pequenas */
+    h1 {
+        /* Tamanio de fuente reducido */
+        font-size: 1.75rem;
+    }
+
+    /* Formularios en pantallas pequenas */
+    .row.g-3 {
+        /* Gap reducido */
+        gap: 0.5rem !important;
+    }
+}
+
+/* Estilo de badge para rol en la navegacion */
+.rol-badge {
+    /* Tamanio de fuente mas grande */
+    font-size: 0.85rem;
+
+    /* Padding adicional */
+    padding-top: 0.5rem !important;
+
+    /* Padding inferior adicional */
+    padding-bottom: 0.5rem !important;
+
+    /* Letra mayuscula para los roles */
+    text-transform: uppercase;
+
+    /* Transicion suave */
+    transition: all 0.3s ease;
+}
+
+/* Efecto hover en badge de rol */
+.rol-badge:hover {
+    /* Sombra en hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    /* Escala aumentada */
+    transform: scale(1.05);
+}

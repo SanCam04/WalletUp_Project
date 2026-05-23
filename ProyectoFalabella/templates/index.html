@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Tienda de Tecnología - Falabella{% endblock %}
+
+{% block content %}
+
+{% include 'components/carrusel-promo.html' %}
+
+<!-- COMPUTADORES -->
+<section class="mb-5">
+    <h2 class="mb-3">Lo mas Vendido en Computadores</h2>
+    <div class="row">
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/productos/laptop-hp-pavilion.avif') }}" class="card-img-top" alt="HP Pavilion" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Laptop HP Pavilion</h5>
+                    <p class="card-text">Intel i7, 16GB RAM, 512GB SSD</p>
+                    <p class="text-success fw-bold">$899.99</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/productos/laptop-generico.jpg') }}" class="card-img-top" alt="Dell XPS" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Laptop Dell XPS</h5>
+                    <p class="card-text">Intel i9, 32GB RAM, 1TB SSD</p>
+                    <p class="text-success fw-bold">$1,499.99</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/productos/desktop-gamer.webp') }}" class="card-img-top" alt="Desktop Gamer" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Desktop Gamer</h5>
+                    <p class="card-text">RTX 3080, Intel i9, 32GB RAM</p>
+                    <p class="text-success fw-bold">$2,299.99</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/productos/laptop-generico.jpg') }}" class="card-img-top" alt="MacBook Pro" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">MacBook Pro</h5>
+                    <p class="card-text">Apple M1 Pro, 16GB RAM, 512GB</p>
+                    <p class="text-success fw-bold">$1,999.99</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/productos/laptop-generico.jpg') }}" class="card-img-top" alt="Lenovo ThinkPad" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Lenovo ThinkPad</h5>
+                    <p class="card-text">Intel i7, 16GB RAM, 512GB SSD</p>
+                    <p class="text-success fw-bold">$899.99</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/productos/laptop-generico.jpg') }}" class="card-img-top" alt="ASUS VivoBook" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">ASUS VivoBook</h5>
+                    <p class="card-text">AMD Ryzen 5, 8GB RAM, 256GB SSD</p>
+                    <p class="text-success fw-bold">$549.99</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CELULARES -->
+<section class="mb-5">
+    <h2 class="mb-4">📱 Celulares</h2>
+    <div class="row">
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/celulares/celular-3.webp') }}" class="card-img-top" alt="iPhone 14 Pro" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">iPhone 14 Pro</h5>
+                    <p class="card-text">256GB, Cámara 48MP, iOS 16</p>
+                    <p class="text-success fw-bold">$999.99</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/celulares/celular-1.png') }}" class="card-img-top" alt="Samsung Galaxy S23" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Samsung Galaxy S23</h5>
+                    <p class="card-text">256GB, Snapdragon 8 Gen 2</p>
+                    <p class="text-success fw-bold">$899.99</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/celulares/celular-5.webp') }}" class="card-img-top" alt="Google Pixel 7" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Google Pixel 7</h5>
+                    <p class="card-text">128GB, Google Tensor, IA</p>
+                    <p class="text-success fw-bold">$599.99</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/celulares/celular-2.webp') }}" class="card-img-top" alt="OnePlus 11" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">OnePlus 11</h5>
+                    <p class="card-text">256GB, OxygenOS, Carga rápida</p>
+                    <p class="text-success fw-bold">$699.99</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/celulares/celular-4.webp') }}" class="card-img-top" alt="Xiaomi 13" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Xiaomi 13</h5>
+                    <p class="card-text">512GB, Snapdragon 8, Cámara 50MP</p>
+                    <p class="text-success fw-bold">$799.99</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-sm-4 col-lg-2 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/celulares/celular-2.webp') }}" class="card-img-top" alt="Motorola Edge 40" style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">Motorola Edge 40</h5>
+                    <p class="card-text">256GB, Snapdragon 8, 50MP</p>
+                    <p class="text-success fw-bold">$549.99</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

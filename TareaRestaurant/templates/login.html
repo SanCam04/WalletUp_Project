@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Gestion Restaurante</title>
+    <!-- Bootstrap CSS desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Enlace a estilos personalizados del login -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+
+<body>
+    <!-- Contenedor principal -->
+    <div class="login-container">
+        <!-- Card del formulario de login -->
+        <div class="card shadow-lg">
+            <!-- Encabezado de la card -->
+            <div class="card-header bg-primary text-white text-center py-4">
+                <h3 class="mb-0">Gestion de Restaurante</h3>
+                <p class="mb-0 small">Sistema de Login RBAC</p>
+            </div>
+
+            <!-- Contenido de la card -->
+            <div class="card-body p-5">
+                <!-- Mostrar mensajes flash de error -->
+                {% with messages = get_flashed_messages(category_filter=['danger']) %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <!-- Alerta de error -->
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Formulario de login -->
+                <form method="POST" id="login-form" class="needs-validation" novalidate>
+                    <!-- Campo de usuario -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Ingrese su usuario" required>
+                        <div class="invalid-feedback">
+                            Usuario es requerido
+                        </div>
+                    </div>
+
+                    <!-- Campo de contrasena -->
+                    <div class="mb-4">
+                        <label for="password" class="form-label">Contrasena</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese su contrasena" required>
+                        <div class="invalid-feedback">
+                            Contrasena es requerida
+                        </div>
+                    </div>
+
+                    <!-- CAPTCHA -->
+                    <div class="mb-4 p-3 bg-light rounded border-2 border-primary">
+                        <!-- Pregunta del captcha -->
+                        <label class="form-label fw-bold text-primary">
+                            Verificacion de seguridad
+                        </label>
+                        <p class="mb-3">
+                            <strong>Cuanto es {{ session.get('captcha_a', 0) }} + {{ session.get('captcha_b', 0) }}?</strong>
+                        </p>
+
+                        <!-- Campo de respuesta del captcha -->
+                        <input type="number" class="form-control" id="captcha_respuesta" name="captcha_respuesta" placeholder="Ingrese la respuesta" required min="0" max="18">
+                        <div class="invalid-feedback">
+                            Respuesta del captcha es requerida
+                        </div>
+                    </div>
+
+                    <!-- Boton de submit -->
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+                        Iniciar Sesion
+                    </button>
+                </form>
+            </div>
+
+            <!-- Pie de la card con usuarios de prueba -->
+            <div class="card-footer text-muted text-center py-3 small">
+                <p class="mb-2">Usuarios de prueba:</p>
+                <p class="mb-0"><strong>admin</strong> - Admin#2026</p>
+                <p class="mb-0"><strong>mesero1</strong> - Mesero#2026</p>
+                <p class="mb-0"><strong>cocinero1</strong> - Cocinero#2026</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Enlace a script personalizado de login -->
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+
+</html>

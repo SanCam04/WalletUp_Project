@@ -1,0 +1,136 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation [ref=e4]:
+      - generic [ref=e5]: 💰 WalletUp
+      - button "superadmin ▼" [ref=e8] [cursor=pointer]
+      - generic [ref=e9]:
+        - link "Dashboard" [ref=e10] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Transacciones" [ref=e11] [cursor=pointer]:
+          - /url: /transacciones
+        - link "Categorías" [ref=e12] [cursor=pointer]:
+          - /url: /categorias
+        - link "Metas" [ref=e13] [cursor=pointer]:
+          - /url: /metas
+        - link "Reportes" [ref=e14] [cursor=pointer]:
+          - /url: /reportes
+        - link "Educación" [ref=e15] [cursor=pointer]:
+          - /url: /educacion
+        - link "👥 Usuarios" [ref=e16] [cursor=pointer]:
+          - /url: /admin/usuarios
+  - generic [ref=e18]:
+    - generic [ref=e19]:
+      - heading "Bienvenido, superadmin!" [level=1] [ref=e20]
+      - paragraph [ref=e21]: Aquí está un resumen de tu situación financiera
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]: Ingresos
+        - generic [ref=e26]: $ 5.386.000
+        - text: Este mes
+      - generic [ref=e27]:
+        - generic [ref=e28]: Gastos
+        - generic [ref=e29]: $ 230.000
+        - text: Este mes
+      - generic [ref=e30]:
+        - generic [ref=e31]: Balance
+        - generic [ref=e32]: $ 5.156.000
+        - text: Neto
+      - generic [ref=e33]:
+        - generic [ref=e34]: Metas
+        - generic [ref=e35]: "5"
+        - text: Activas
+    - generic [ref=e37]:
+      - heading "Gastos por Categoría" [level=3] [ref=e40]
+      - heading "Ingresos vs Gastos" [level=3] [ref=e45]
+    - generic [ref=e49]:
+      - heading "Acciones Rápidas" [level=3] [ref=e51]
+      - generic [ref=e53]:
+        - button "➖ Registrar Gasto" [ref=e54] [cursor=pointer]
+        - button "➕ Registrar Ingreso" [ref=e55] [cursor=pointer]
+        - link "🏷️ Categorías" [ref=e56] [cursor=pointer]:
+          - /url: /categorias
+        - link "🎯 Crear Meta" [ref=e57] [cursor=pointer]:
+          - /url: /metas
+        - link "📊 Ver Reportes" [ref=e58] [cursor=pointer]:
+          - /url: /reportes
+    - generic [ref=e60]:
+      - heading "Últimas Transacciones" [level=3] [ref=e62]
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - generic [ref=e67]: Descripción
+          - generic [ref=e68]: Categoría
+          - generic [ref=e69]: Monto
+        - generic [ref=e70]:
+          - generic [ref=e71]:
+            - generic [ref=e72]: pago mesada persional
+            - text: 19 de mayo de 2026
+          - generic [ref=e74]: Pago mesada pensional
+          - generic [ref=e75]: +$ 5.386.000
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - generic [ref=e78]: administracion
+            - text: 19 de mayo de 2026
+          - generic [ref=e80]: Servicios del hogar
+          - generic [ref=e81]: "-$ 230.000"
+      - link "Ver todas las transacciones →" [ref=e83] [cursor=pointer]:
+        - /url: /transacciones
+    - generic [ref=e85]:
+      - heading "Mis Metas" [level=3] [ref=e87]
+      - generic [ref=e89]:
+        - generic [ref=e90]:
+          - generic [ref=e91]:
+            - heading "Moto NX 190 Honda" [level=4] [ref=e92]
+            - text: Compra de moto a futuro
+          - generic [ref=e93]: ○
+        - generic [ref=e95]:
+          - generic [ref=e96]: $ 0 / $ 15.000.000
+          - generic [ref=e97]: 0%
+      - link "Gestionar metas →" [ref=e99] [cursor=pointer]:
+        - /url: /metas
+  - contentinfo [ref=e100]:
+    - generic [ref=e101]:
+      - generic [ref=e102]:
+        - generic [ref=e103]:
+          - heading "WalletUp" [level=4] [ref=e104]
+          - paragraph [ref=e105]: Tu solución para gestionar finanzas personales de forma inteligente y educativa.
+        - generic [ref=e106]:
+          - heading "Enlaces Rápidos" [level=5] [ref=e107]
+          - list [ref=e108]:
+            - listitem [ref=e109]:
+              - link "Dashboard" [ref=e110] [cursor=pointer]:
+                - /url: /dashboard
+            - listitem [ref=e111]:
+              - link "Transacciones" [ref=e112] [cursor=pointer]:
+                - /url: /transacciones
+            - listitem [ref=e113]:
+              - link "Metas" [ref=e114] [cursor=pointer]:
+                - /url: /metas
+            - listitem [ref=e115]:
+              - link "Reportes" [ref=e116] [cursor=pointer]:
+                - /url: /reportes
+        - generic [ref=e117]:
+          - heading "Recursos" [level=5] [ref=e118]
+          - list [ref=e119]:
+            - listitem [ref=e120]:
+              - link "Centro de Educación" [ref=e121] [cursor=pointer]:
+                - /url: /educacion
+            - listitem [ref=e122]:
+              - link "Contacto" [ref=e123] [cursor=pointer]:
+                - /url: "#contacto"
+            - listitem [ref=e124]:
+              - link "Privacidad" [ref=e125] [cursor=pointer]:
+                - /url: "#privacidad"
+            - listitem [ref=e126]:
+              - link "Términos de Uso" [ref=e127] [cursor=pointer]:
+                - /url: "#terminos"
+        - generic [ref=e128]:
+          - heading "Contacto" [level=5] [ref=e129]
+          - paragraph [ref=e130]:
+            - text: "Email:"
+            - link "soporte@walletup.com" [ref=e131] [cursor=pointer]:
+              - /url: mailto:soporte@walletup.com
+          - paragraph [ref=e132]: "Teléfono: +57 (1) 234-5678"
+      - separator [ref=e133]
+      - generic [ref=e134]:
+        - paragraph [ref=e135]: © 2026 WalletUp. Todos los derechos reservados.
+        - paragraph [ref=e136]: Desarrollado con ❤️ para mejorar tu educación financiera

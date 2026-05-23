@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes - WalletUp</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+<body>
+  {% include 'componentes/header.html' %}
+
+  <div class="page-container">
+    <div class="container">
+      <h1>Reportes Financieros</h1>
+      <p class="text-muted">Análisis detallado de tus finanzas</p>
+
+      <div id="alertContainer"></div>
+
+      <div class="card mb-4">
+        <div class="card-body flex gap-2">
+          <div class="form-group" style="flex: 1;">
+            <label>Desde</label>
+            <input type="date" id="fechaInicio" class="form-control">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>Hasta</label>
+            <input type="date" id="fechaFin" class="form-control">
+          </div>
+          <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="cargarReportes()">Filtrar</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="m-0">Distribución de Gastos</h3>
+          </div>
+          <div class="card-body" style="position: relative; height: 300px;">
+            <canvas id="chartGastosPie"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="m-0">Resumen Mensual</h3>
+          </div>
+          <div class="card-body">
+            <div class="stat-card">
+              <div class="stat-label">Ingresos</div>
+              <div class="stat-value" id="reporteIngresos">$0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Gastos</div>
+              <div class="stat-value" id="reporteGastos" style="color: #f56565;">$0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Balance</div>
+              <div class="stat-value" id="reporteBalance">$0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="m-0">Top Categorías de Gasto</h3>
+        </div>
+        <div class="card-body" id="topCategorias">
+          <p class="text-center text-muted">Cargando...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'componentes/footer.html' %}
+
+  <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/reportes.js') }}"></script>
+</body>
+</html>

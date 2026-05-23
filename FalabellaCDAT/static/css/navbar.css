@@ -1,0 +1,76 @@
+/* Navbar Styles */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 12px 30px;
+}
+
+.navbar .container-fluid {
+    padding: 0;
+}
+
+.logo-navbar {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.logo-navbar:hover {
+    transform: scale(1.05);
+}
+
+/* Submenu secundario */
+.submenu-navbar {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.submenu-navbar .container-fluid {
+    padding: 0;
+}
+
+.submenu-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    gap: 0;
+    justify-content: center;
+}
+
+.submenu-list li {
+    margin: 0;
+    border-right: 1px solid #dee2e6;
+}
+
+.submenu-list li:last-child {
+    border-right: none;
+}
+
+.submenu-list a {
+    display: block;
+    padding: 12px 18px;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.submenu-list a:hover {
+    background-color: #e9ecef;
+    color: #91c93f;
+}
+
+/* Estado activo del submenu */
+.submenu-list a.active {
+    background-color: #e9ecef;
+    color: #91c93f;
+    border-bottom: 3px solid #91c93f;
+    font-weight: 600;
+}

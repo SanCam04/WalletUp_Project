@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auditoría - WalletUp Admin</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  {% include 'componentes/header.html' %}
+
+  <div class="page-container">
+    <div class="container">
+      <h1>📋 Auditoría del Sistema</h1>
+      <p class="text-muted">Historial de todas las acciones realizadas en la plataforma</p>
+
+      <div id="alertContainer"></div>
+
+      <div class="card mb-4">
+        <div class="card-header">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 class="m-0">Registro de Auditoría</h3>
+            <div style="display: flex; gap: 1rem;">
+              <input type="text" id="filtroUsuario" class="form-control" placeholder="Filtrar por usuario..." style="max-width: 200px;">
+              <button class="btn btn-secondary" onclick="cargarLogs()">🔄 Actualizar</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="logsContainer">
+            <p class="text-center text-muted">Cargando auditoría...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-footer text-center">
+          <p class="text-muted m-0">Se muestran los últimos 500 registros de auditoría</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'componentes/footer.html' %}
+
+  <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin_logs.js') }}"></script>
+</body>
+</html>

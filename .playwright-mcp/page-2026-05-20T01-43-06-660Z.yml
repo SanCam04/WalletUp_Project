@@ -1,0 +1,112 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation [ref=e4]:
+      - generic [ref=e5]: 💰 WalletUp
+      - button "superadmin ▼" [ref=e8] [cursor=pointer]
+      - generic [ref=e9]:
+        - link "Dashboard" [ref=e10] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Transacciones" [ref=e11] [cursor=pointer]:
+          - /url: /transacciones
+        - link "Categorías" [ref=e12] [cursor=pointer]:
+          - /url: /categorias
+        - link "Metas" [ref=e13] [cursor=pointer]:
+          - /url: /metas
+        - link "Reportes" [ref=e14] [cursor=pointer]:
+          - /url: /reportes
+        - link "Educación" [ref=e15] [cursor=pointer]:
+          - /url: /educacion
+        - link "👥 Usuarios" [ref=e16] [cursor=pointer]:
+          - /url: /admin/usuarios
+  - generic [ref=e18]:
+    - generic [ref=e19]:
+      - heading "Bienvenido, superadmin!" [level=1] [ref=e20]
+      - paragraph [ref=e21]: Aquí está un resumen de tu situación financiera
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]: Ingresos
+        - generic [ref=e26]: $0
+        - text: Este mes
+      - generic [ref=e27]:
+        - generic [ref=e28]: Gastos
+        - generic [ref=e29]: $0
+        - text: Este mes
+      - generic [ref=e30]:
+        - generic [ref=e31]: Balance
+        - generic [ref=e32]: $0
+        - text: Neto
+      - generic [ref=e33]:
+        - generic [ref=e34]: Metas
+        - generic [ref=e35]: "0"
+        - text: Activas
+    - generic [ref=e37]:
+      - heading "Gastos por Categoría" [level=3] [ref=e40]
+      - heading "Ingresos vs Gastos" [level=3] [ref=e45]
+    - generic [ref=e49]:
+      - heading "Acciones Rápidas" [level=3] [ref=e51]
+      - generic [ref=e53]:
+        - button "➖ Registrar Gasto" [ref=e54] [cursor=pointer]
+        - button "➕ Registrar Ingreso" [ref=e55] [cursor=pointer]
+        - link "🏷️ Categorías" [ref=e56] [cursor=pointer]:
+          - /url: /categorias
+        - link "🎯 Crear Meta" [ref=e57] [cursor=pointer]:
+          - /url: /metas
+        - link "📊 Ver Reportes" [ref=e58] [cursor=pointer]:
+          - /url: /reportes
+    - generic [ref=e60]:
+      - heading "Últimas Transacciones" [level=3] [ref=e62]
+      - paragraph [ref=e65]: Cargando transacciones...
+      - link "Ver todas las transacciones →" [ref=e67] [cursor=pointer]:
+        - /url: /transacciones
+    - generic [ref=e69]:
+      - heading "Mis Metas" [level=3] [ref=e71]
+      - paragraph [ref=e73]: Cargando metas...
+      - link "Gestionar metas →" [ref=e75] [cursor=pointer]:
+        - /url: /metas
+  - contentinfo [ref=e76]:
+    - generic [ref=e77]:
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - heading "WalletUp" [level=4] [ref=e80]
+          - paragraph [ref=e81]: Tu solución para gestionar finanzas personales de forma inteligente y educativa.
+        - generic [ref=e82]:
+          - heading "Enlaces Rápidos" [level=5] [ref=e83]
+          - list [ref=e84]:
+            - listitem [ref=e85]:
+              - link "Dashboard" [ref=e86] [cursor=pointer]:
+                - /url: /dashboard
+            - listitem [ref=e87]:
+              - link "Transacciones" [ref=e88] [cursor=pointer]:
+                - /url: /transacciones
+            - listitem [ref=e89]:
+              - link "Metas" [ref=e90] [cursor=pointer]:
+                - /url: /metas
+            - listitem [ref=e91]:
+              - link "Reportes" [ref=e92] [cursor=pointer]:
+                - /url: /reportes
+        - generic [ref=e93]:
+          - heading "Recursos" [level=5] [ref=e94]
+          - list [ref=e95]:
+            - listitem [ref=e96]:
+              - link "Centro de Educación" [ref=e97] [cursor=pointer]:
+                - /url: /educacion
+            - listitem [ref=e98]:
+              - link "Contacto" [ref=e99] [cursor=pointer]:
+                - /url: "#contacto"
+            - listitem [ref=e100]:
+              - link "Privacidad" [ref=e101] [cursor=pointer]:
+                - /url: "#privacidad"
+            - listitem [ref=e102]:
+              - link "Términos de Uso" [ref=e103] [cursor=pointer]:
+                - /url: "#terminos"
+        - generic [ref=e104]:
+          - heading "Contacto" [level=5] [ref=e105]
+          - paragraph [ref=e106]:
+            - text: "Email:"
+            - link "soporte@walletup.com" [ref=e107] [cursor=pointer]:
+              - /url: mailto:soporte@walletup.com
+          - paragraph [ref=e108]: "Teléfono: +57 (1) 234-5678"
+      - separator [ref=e109]
+      - generic [ref=e110]:
+        - paragraph [ref=e111]: © 2026 WalletUp. Todos los derechos reservados.
+        - paragraph [ref=e112]: Desarrollado con ❤️ para mejorar tu educación financiera

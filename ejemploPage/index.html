@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Sitio Informativo</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="header">
+        <h1>Mi Sitio Web</h1>
+    </header>
+    <nav class="nav">
+        <a href="#">Inicio</a>
+        <a href="#">Servicios</a>
+        <a href="#">Contacto</a>
+    </nav>
+    <main class="container">
+        <section class="card">
+            <h2>Servicio 1</h2>
+            <p>Descripción del primer servicio ofrecido por la empresa.</p>
+            <button>Ver más</button>
+        </section>
+        <section class="card">
+            <h2>Servicio 2</h2>
+            <p>Información relevante sobre el segundo servicio disponible.</p>
+            <button>Ver más</button>
+        </section>
+        <section class="card">
+            <h2>Servicio 3</h2>
+            <p>Detalles importantes del tercer servicio que se ofrece.</p>
+            <button>Ver más</button>
+        </section>
+        <section class="card">
+            <h2>Servicio 4</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1">
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </section>
+    </main>
+    <!--inicio registro-->
+
+    <div class="container2 mt-5">
+        <div class="card2 shadow p-4">
+            <h4 class="mb-3">Registro de Usuario</h4>
+            <form id="formRegistro">
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" id="nombre" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Correo</label>
+                    <input type="email" id="correo" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Edad</label>
+                    <input type="number" id="edad" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Enviar</button>
+            </form>
+            <div id="mensaje" class="mt-3"></div>
+        </div>
+        <!---calculadora-->
+        <div class="card2 shadow p-4">
+            <h4 class="mb-3">Calculadora</h4>
+            <form id="formCalculadora">
+                <div class="mb-3">
+                    <label class="form-label">Numero 1</label>
+                    <input type="number" id="numero1" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Numero 2</label>
+                    <input type="number" id="numero2" class="form-control" required>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" id="btnMul" class="btn btn-primary flex-fill op-btn" data-op="*">x</button>
+                    <button type="button" id="btnDiv" class="btn btn-primary flex-fill op-btn" data-op="/">/</button>
+                    <button type="button" id="btnSum" class="btn btn-primary flex-fill op-btn" data-op="+">+</button>
+                    <button type="button" id="btnRes" class="btn btn-primary flex-fill op-btn" data-op="-">-</button>
+                </div>
+            </form>
+            <div id="mensajeCalc" class="mt-3"></div>
+        </div>
+
+
+    </div>
+    <script src="script.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <footer class="footer">
+        <p>© 2026 - Sitio de práctica académica</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

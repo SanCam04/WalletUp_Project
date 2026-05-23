@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Simulador CDAT - Banco Falabella{% endblock %}
+
+{% block css %}
+    <link href="{{ url_for('static', filename='css/simulador.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <!-- Contenido del módulo de inversión -->
+    {% include 'modules/inversion/inversion.html' %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/inversion.js') }}"></script>
+{% endblock %}
