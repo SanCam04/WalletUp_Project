@@ -20,15 +20,16 @@ function mostrarUsuarios(usuarios) {
   }
 
   let html = `
-    <table class="table">
-      <tr style="background: #f7fafc; font-weight: 600;">
-        <td>Usuario</td>
-        <td>Email</td>
-        <td>Rol</td>
-        <td>Registrado</td>
-        <td style="text-align: center;">Acciones</td>
-      </tr>
-  `;
+    <div class="table-responsive">
+      <table class="table">
+        <tr style="background: #f7fafc; font-weight: 600;">
+          <td>Usuario</td>
+          <td>Email</td>
+          <td>Rol</td>
+          <td>Registrado</td>
+          <td style="text-align: center;">Acciones</td>
+        </tr>
+    `;
 
   usuarios.forEach(u => {
     const rolColor = u.rol === 'superadmin' ? '#667eea' : '#48bb78';
@@ -50,7 +51,7 @@ function mostrarUsuarios(usuarios) {
     `;
   });
 
-  html += '</table>';
+  html += '</table></div>';
   container.innerHTML = html;
 }
 
@@ -134,14 +135,15 @@ function mostrarBackups(backups) {
   }
 
   let html = `
-    <table class="table">
-      <tr style="background: #f7fafc; font-weight: 600;">
-        <td>Archivo</td>
-        <td>Tamaño</td>
-        <td>Fecha</td>
-        <td style="text-align: center;">Descargar</td>
-      </tr>
-  `;
+    <div class="table-responsive">
+      <table class="table">
+        <tr style="background: #f7fafc; font-weight: 600;">
+          <td>Archivo</td>
+          <td>Tamaño</td>
+          <td>Fecha</td>
+          <td style="text-align: center;">Descargar</td>
+        </tr>
+    `;
 
   backups.forEach(b => {
     html += `
@@ -156,7 +158,7 @@ function mostrarBackups(backups) {
     `;
   });
 
-  html += '</table>';
+  html += '</table></div>';
   container.innerHTML = html;
 }
 
@@ -186,7 +188,81 @@ async function crearBackup() {
   }
 }
 
+let auditoriaLogs = [];
+let paginaActual = 1;
+const registrosPorPagina = 20;
+
+async function cargarAuditoria() {
+  try {
+    auditoriaLogs = await fetchWithAuth(`${API_BASE}/auditoria`);
+    paginaActual = 1;
+    mostrarAuditoria();
+  } catch (error) {
+    console.error('Error cargando auditoría:', error);
+  }
+}
+
+function mostrarAuditoria() {
+  const container = document.getElementById('auditoriaContainer');
+
+  if (auditoriaLogs.length === 0) {
+    container.innerHTML = '<p class="text-center text-muted">No hay registros de auditoría</p>';
+    return;
+  }
+
+  const inicio = (paginaActual - 1) * registrosPorPagina;
+  const fin = inicio + registrosPorPagina;
+  const logsPagina = auditoriaLogs.slice(inicio, fin);
+  const totalPaginas = Math.ceil(auditoriaLogs.length / registrosPorPagina);
+
+  let html = `
+    <div class="table-responsive">
+      <table class="table">
+        <tr style="background: #f7fafc; font-weight: 600;">
+          <td>Fecha</td>
+          <td>Acción</td>
+        </tr>
+    `;
+
+  logsPagina.forEach(log => {
+    html += `
+      <tr>
+        <td>${formatDate(log.fecha)}</td>
+        <td>${log.accion}</td>
+      </tr>
+    `;
+  });
+
+  html += `
+      </table>
+    </div>
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px; align-items: center;">
+      <button class="btn btn-secondary" onclick="irPaginaAnterior()" ${paginaActual === 1 ? 'disabled' : ''}>⬅️ Atrás</button>
+      <span style="color: #718096; font-weight: 600;">Página ${paginaActual} de ${totalPaginas}</span>
+      <button class="btn btn-secondary" onclick="irPaginaSiguiente()" ${paginaActual === totalPaginas ? 'disabled' : ''}>Siguiente ➡️</button>
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+function irPaginaAnterior() {
+  if (paginaActual > 1) {
+    paginaActual--;
+    mostrarAuditoria();
+  }
+}
+
+function irPaginaSiguiente() {
+  const totalPaginas = Math.ceil(auditoriaLogs.length / registrosPorPagina);
+  if (paginaActual < totalPaginas) {
+    paginaActual++;
+    mostrarAuditoria();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   cargarUsuarios();
   cargarBackups();
+  cargarAuditoria();
 });

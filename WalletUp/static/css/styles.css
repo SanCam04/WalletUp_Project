@@ -231,20 +231,108 @@ header {
   text-decoration: underline;
 }
 
+.dropdown {
+  position: relative;
+}
+
 .dropdown-menu {
   border-radius: var(--border-radius);
   border: none;
   box-shadow: var(--shadow-lg);
+  z-index: 1000;
 }
 
 .dropdown-item {
+  display: block;
+  width: 100%;
   padding: 0.75rem 1rem;
   transition: var(--transition);
+  text-align: left;
 }
 
 .dropdown-item:hover {
   background-color: var(--light-color);
-  color: var(--primary-color);
+}
+
+/* Responsive dropdown */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    min-width: 180px;
+  }
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.hamburger {
+  display: flex;
+  color: white;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-menu {
+  display: flex !important;
+  gap: 1.5rem;
+  transition: var(--transition);
+}
+
+.nav-menu.active {
+  display: flex !important;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  padding: 1rem;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.nav-menu.active .nav-link {
+  margin-left: 0;
+  padding: 0.5rem 0;
+}
+
+/* Responsive: Solo hamburger en móvil */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex !important;
+  }
+
+  .nav-menu {
+    display: none !important;
+  }
+
+  .nav-menu.active {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .hamburger {
+    display: none !important;
+  }
+
+  .nav-menu {
+    display: flex !important;
+    position: static;
+    background: none;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .nav-menu.active {
+    display: flex !important;
+  }
 }
 
 /* =====================================================
@@ -311,6 +399,17 @@ footer a:hover {
 .col-2 { grid-column: span 2; }
 .col-3 { grid-column: span 3; }
 .col-4 { grid-column: span 4; }
+
+/* Bootstrap-style columns */
+.col-md-6 {
+  grid-column: span 1;
+}
+
+@media (min-width: 768px) {
+  .row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 .m-0 { margin: 0; }
 .m-1 { margin: 0.5rem; }
@@ -403,6 +502,13 @@ footer a:hover {
    Tablas
    ===================================================== */
 
+.table-responsive {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -410,6 +516,7 @@ footer a:hover {
   background-color: white;
   border-radius: var(--border-radius);
   overflow: hidden;
+  min-width: 500px;
 }
 
 .table thead {
@@ -422,15 +529,45 @@ footer a:hover {
   font-weight: 600;
   text-align: left;
   color: var(--dark-color);
+  white-space: nowrap;
 }
 
 .table td {
   padding: 1rem;
   border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
 }
 
 .table tbody tr:hover {
   background-color: #f7fafc;
+}
+
+/* Responsive tables */
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1.5rem 0;
+  }
+
+  .table-responsive {
+    display: block;
+    overflow-x: auto;
+    margin: 0;
+    padding: 0 1.5rem;
+    width: 100%;
+  }
+
+  .table {
+    font-size: 0.85rem;
+    min-width: 450px;
+  }
+
+  .table td {
+    padding: 0.75rem;
+  }
+
+  .table th {
+    padding: 0.75rem;
+  }
 }
 
 /* =====================================================
@@ -559,8 +696,8 @@ footer a:hover {
   background-color: white;
   padding: 2rem;
   border-radius: var(--border-radius);
-  width: 90%;
-  max-width: 500px;
+  width: 70%;
+  max-width: 900px;
   box-shadow: var(--shadow-lg);
   animation: slideUp 0.3s ease;
 }
