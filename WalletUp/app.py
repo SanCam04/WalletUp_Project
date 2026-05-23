@@ -1345,7 +1345,7 @@ def obtener_gastos_por_categoria():
     cursor = conn.cursor()
 
     cursor.execute("""
-    SELECT c.nombre, SUM(t.monto) as total
+    SELECT c.nombre, c.color, SUM(t.monto) as total
     FROM transacciones t
     JOIN categorias c ON t.categoria_id = c.id
     WHERE t.usuario_id = ? AND t.tipo = 'gasto'
