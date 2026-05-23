@@ -1,0 +1,119 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation [ref=e4]:
+      - generic [ref=e5]: 💰 WalletUp
+      - button "superadmin ▼" [ref=e8] [cursor=pointer]
+      - generic [ref=e9]:
+        - link "Dashboard" [ref=e10] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Transacciones" [ref=e11] [cursor=pointer]:
+          - /url: /transacciones
+        - link "Categorías" [ref=e12] [cursor=pointer]:
+          - /url: /categorias
+        - link "Metas" [ref=e13] [cursor=pointer]:
+          - /url: /metas
+        - link "Reportes" [ref=e14] [cursor=pointer]:
+          - /url: /reportes
+        - link "Educación" [ref=e15] [cursor=pointer]:
+          - /url: /educacion
+        - link "👥 Usuarios" [ref=e16] [cursor=pointer]:
+          - /url: /admin/usuarios
+  - generic [ref=e18]:
+    - heading "Gestión de Usuarios" [level=1] [ref=e19]
+    - paragraph [ref=e20]: Crea y gestiona usuarios de la plataforma
+    - button "➕ Crear Nuevo Usuario" [ref=e23] [cursor=pointer]
+    - generic [ref=e24]:
+      - heading "Usuarios Registrados" [level=3] [ref=e26]
+      - table [ref=e30]:
+        - rowgroup [ref=e31]:
+          - row "Usuario Email Rol Registrado Acciones" [ref=e32]:
+            - cell "Usuario" [ref=e33]
+            - cell "Email" [ref=e34]
+            - cell "Rol" [ref=e35]
+            - cell "Registrado" [ref=e36]
+            - cell "Acciones" [ref=e37]
+          - row "superadmin superadmin@walletup.com superadmin 19 de mayo de 2026 🔒 Bloquear" [ref=e38]:
+            - cell "superadmin" [ref=e39]:
+              - strong [ref=e40]: superadmin
+            - cell "superadmin@walletup.com" [ref=e41]
+            - cell "superadmin" [ref=e42]:
+              - generic [ref=e43]: superadmin
+            - cell "19 de mayo de 2026" [ref=e44]
+            - cell "🔒 Bloquear" [ref=e45]:
+              - button "🔒 Bloquear" [ref=e46] [cursor=pointer]
+          - row "cliente1 cliente1@walletup.com cliente 19 de mayo de 2026 🔒 Bloquear" [ref=e47]:
+            - cell "cliente1" [ref=e48]:
+              - strong [ref=e49]: cliente1
+            - cell "cliente1@walletup.com" [ref=e50]
+            - cell "cliente" [ref=e51]:
+              - generic [ref=e52]: cliente
+            - cell "19 de mayo de 2026" [ref=e53]
+            - cell "🔒 Bloquear" [ref=e54]:
+              - button "🔒 Bloquear" [ref=e55] [cursor=pointer]
+    - generic [ref=e56]:
+      - heading "💾 Backup de Base de Datos" [level=3] [ref=e58]
+      - generic [ref=e59]:
+        - paragraph [ref=e60]: Realiza copias de seguridad de toda la información
+        - button "📥 Crear Backup Ahora" [ref=e61] [cursor=pointer]
+        - heading "Backups Anteriores" [level=4] [ref=e62]
+        - table [ref=e65]:
+          - rowgroup [ref=e66]:
+            - row "Archivo Tamaño Fecha Descargar" [ref=e67]:
+              - cell "Archivo" [ref=e68]
+              - cell "Tamaño" [ref=e69]
+              - cell "Fecha" [ref=e70]
+              - cell "Descargar" [ref=e71]
+            - row "walletup_backup_20260519_202210.db 0.08 MB 2026-05-19 20:22:10 ⬇️ Descargar" [ref=e72]:
+              - cell "walletup_backup_20260519_202210.db" [ref=e73]
+              - cell "0.08 MB" [ref=e74]
+              - cell "2026-05-19 20:22:10" [ref=e75]
+              - cell "⬇️ Descargar" [ref=e76]:
+                - link "⬇️ Descargar" [ref=e77] [cursor=pointer]:
+                  - /url: /api/admin/backup/walletup_backup_20260519_202210.db
+  - contentinfo [ref=e78]:
+    - generic [ref=e79]:
+      - generic [ref=e80]:
+        - generic [ref=e81]:
+          - heading "WalletUp" [level=4] [ref=e82]
+          - paragraph [ref=e83]: Tu solución para gestionar finanzas personales de forma inteligente y educativa.
+        - generic [ref=e84]:
+          - heading "Enlaces Rápidos" [level=5] [ref=e85]
+          - list [ref=e86]:
+            - listitem [ref=e87]:
+              - link "Dashboard" [ref=e88] [cursor=pointer]:
+                - /url: /dashboard
+            - listitem [ref=e89]:
+              - link "Transacciones" [ref=e90] [cursor=pointer]:
+                - /url: /transacciones
+            - listitem [ref=e91]:
+              - link "Metas" [ref=e92] [cursor=pointer]:
+                - /url: /metas
+            - listitem [ref=e93]:
+              - link "Reportes" [ref=e94] [cursor=pointer]:
+                - /url: /reportes
+        - generic [ref=e95]:
+          - heading "Recursos" [level=5] [ref=e96]
+          - list [ref=e97]:
+            - listitem [ref=e98]:
+              - link "Centro de Educación" [ref=e99] [cursor=pointer]:
+                - /url: /educacion
+            - listitem [ref=e100]:
+              - link "Contacto" [ref=e101] [cursor=pointer]:
+                - /url: "#contacto"
+            - listitem [ref=e102]:
+              - link "Privacidad" [ref=e103] [cursor=pointer]:
+                - /url: "#privacidad"
+            - listitem [ref=e104]:
+              - link "Términos de Uso" [ref=e105] [cursor=pointer]:
+                - /url: "#terminos"
+        - generic [ref=e106]:
+          - heading "Contacto" [level=5] [ref=e107]
+          - paragraph [ref=e108]:
+            - text: "Email:"
+            - link "soporte@walletup.com" [ref=e109] [cursor=pointer]:
+              - /url: mailto:soporte@walletup.com
+          - paragraph [ref=e110]: "Teléfono: +57 (1) 234-5678"
+      - separator [ref=e111]
+      - generic [ref=e112]:
+        - paragraph [ref=e113]: © 2026 WalletUp. Todos los derechos reservados.
+        - paragraph [ref=e114]: Desarrollado con ❤️ para mejorar tu educación financiera

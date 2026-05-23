@@ -1394,6 +1394,53 @@ def obtener_articulos_educativos():
 
     return jsonify(resultado), 200
 
+@app.route('/api/educacion/noticias', methods=['GET'])
+@api_login_required
+def obtener_noticias_financieras():
+    try:
+        import requests
+        api_key = os.environ.get('NEWS_API_KEY', '')
+
+        if api_key:
+            url = f"https://newsapi.org/v2/everything?q=finanzas+educación+personal&language=es&sortBy=publishedAt&apiKey={api_key}&pageSize=10"
+            response = requests.get(url, timeout=5)
+
+            if response.status_code == 200:
+                datos = response.json()
+                registrar_log(session['username'], "consulto noticias financieras")
+                return jsonify(datos.get('articles', [])), 200
+
+        noticias_ejemplo = [
+            {
+                "title": "Cómo empezar a ahorrar: consejos prácticos",
+                "description": "Descubre estrategias efectivas para comenzar tu viaje hacia la independencia financiera.",
+                "url": "#",
+                "publishedAt": datetime.now().isoformat(),
+                "source": {"name": "WalletUp"}
+            },
+            {
+                "title": "Entendiendo el interés compuesto",
+                "description": "El interés compuesto es la octava maravilla del mundo. Aprende cómo funciona en tu favor.",
+                "url": "#",
+                "publishedAt": datetime.now().isoformat(),
+                "source": {"name": "WalletUp"}
+            },
+            {
+                "title": "Presupuesto personal: guía paso a paso",
+                "description": "Controla tus gastos y alcanza tus metas financieras con un presupuesto bien planificado.",
+                "url": "#",
+                "publishedAt": datetime.now().isoformat(),
+                "source": {"name": "WalletUp"}
+            }
+        ]
+
+        registrar_log(session['username'], "consulto noticias financieras (ejemplo)")
+        return jsonify(noticias_ejemplo), 200
+
+    except Exception as e:
+        registrar_log(session['username'], f"error al consultar noticias: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
 # =====================================================
 # rutas de alertas
 # =====================================================
