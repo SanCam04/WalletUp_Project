@@ -11,37 +11,13 @@
 
   <div class="page-container">
     <div class="container">
-      <h1>Centro de Educación Financiera</h1>
-      <p class="text-muted">Aprende conceptos clave y utiliza nuestras herramientas para mejorar tus finanzas</p>
+      <h1>Calculadora Financiera</h1>
+      <p class="text-muted">Calcula cuotas, intereses y plazos para tus créditos</p>
 
       <div id="alertContainer"></div>
 
-      <!-- Tabs de navegación -->
-      <div class="card mb-4">
-        <div class="card-body" style="padding: 0; border-bottom: 1px solid #e2e8f0;">
-          <div style="display: flex; gap: 1rem; border-bottom: 2px solid #e2e8f0;">
-            <button class="tab-btn active" onclick="cambiarTab('articulos')" style="padding: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; border-bottom: 3px solid #667eea; color: #667eea;">📚 Artículos</button>
-            <button class="tab-btn" onclick="cambiarTab('calculadora')" style="padding: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; color: #718096;">🧮 Calculadora</button>
-            <button class="tab-btn" onclick="cambiarTab('noticias')" style="padding: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; color: #718096;">📰 Noticias</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sección de Artículos -->
-      <div id="tabArticulos" class="tab-content">
-        <div class="card mb-4">
-          <div class="card-body">
-            <input type="text" id="buscarArticulo" class="form-control" placeholder="Buscar artículos..."
-                   onkeyup="filtrarArticulos(this.value)">
-          </div>
-        </div>
-        <div id="articulosContainer" class="row">
-          <p class="text-center text-muted">Cargando contenido educativo...</p>
-        </div>
-      </div>
-
       <!-- Sección de Calculadora -->
-      <div id="tabCalculadora" class="tab-content" style="display: none;">
+      <div id="tabCalculadora" class="tab-content">
         <div class="card">
           <div class="card-header">
             <h3 class="m-0">🧮 Calculadora Financiera</h3>
@@ -98,25 +74,6 @@
         </div>
       </div>
 
-      <!-- Sección de Noticias -->
-      <div id="tabNoticias" class="tab-content" style="display: none;">
-        <div id="noticiasContainer">
-          <p class="text-center text-muted">Cargando noticias financieras...</p>
-        </div>
-      </div>
-
-      <!-- Modal para leer artículo -->
-      <div id="modalArticulo" class="modal">
-        <div class="modal-content" style="max-width: 800px;">
-          <div class="modal-header">
-            <h3 class="modal-title" id="tituloArticulo"></h3>
-            <button class="modal-close" onclick="cerrarModal('modalArticulo')">×</button>
-          </div>
-          <div class="card-body" id="contenidoArticulo">
-            <!-- El contenido se cargará aquí -->
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
